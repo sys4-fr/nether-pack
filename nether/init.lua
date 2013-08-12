@@ -534,75 +534,123 @@ minetest.register_node( "nether:glowstone", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand = 1.5},
 })
 
+local c_air = minetest.get_content_id("air")
+local c_netherrack = minetest.get_content_id("nether:netherrack")
+local c_glowstone = minetest.get_content_id("nether:glowstone")
+local c_lava = minetest.get_content_id("default:lava_source")
+
+local info = true
+local trees_enabled = true
 -- Create the Nether
-minetest.register_on_generated(function(minp, maxp)
+minetest.register_on_generated(function(minp, maxp, seed)
 	local addpos = {}
 	hadesthronecounter = 1
-	if ((maxp.y >= NETHER_BOTTOM) and (minp.y <= NETHER_DEPTH)) then
-		-- Pass 1: Terrain generation
-		for x=minp.x, maxp.x, 1 do
+	if not (maxp.y >= NETHER_BOTTOM and minp.y <= NETHER_DEPTH) then
+		return
+	end
+
+	if info then
+		t1 = os.clock()
+		local geninfo = "[nether] tries to generate at: x=["..minp.x.."; "..maxp.x.."]; y=["..minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]"
+		print(geninfo)
+		minetest.chat_send_all(geninfo)
+	end
+	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+	local data = vm:get_data()
+	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
+
+	local pr = PseudoRandom(seed+33)
+	local num = 1
+	local tab = {}
+
+	-- Pass 1: Terrain generation
+	for x=minp.x, maxp.x, 1 do
+		for z=minp.z, maxp.z, 1 do
 			for y=minp.y, maxp.y, 1 do
-				for z=minp.z, maxp.z, 1 do
-					addpos = {x=x, y=y, z=z}
-					if y == NETHER_DEPTH then
-						minetest.env:add_node(addpos, {name="nether:netherrack"})
-					elseif y == NETHER_BOTTOM then
-						minetest.env:add_node(addpos, {name="nether:netherrack"})
-					elseif (math.floor(math.random(0, GLOWSTONE_FREQ_ROOF)) == 1) and (y >= NETHER_ROOF_ABS-1) and (nether:can_add_sticky_node(addpos) == true) then
+				addpos = {x=x, y=y, z=z}
+				p_addpos = area:index(x, y, z)
+				d_p_addpos = data[p_addpos]
+				if (y == NETHER_DEPTH or y == NETHER_BOTTOM) then
+					data[p_addpos] = c_netherrack
+				elseif pr:next(0,GLOWSTONE_FREQ_ROOF) == 1
+				and y >= NETHER_ROOF_ABS-1
+				and nether:can_add_sticky_node(addpos) then
+					data[p_addpos] = c_glowstone
+					--[[elseif (math.floor(math.random(0, GLOWSTONE_FREQ_LAVA)) == 1)
+						and ((nether:nodebelow(addpos) == "nether:lava_source") or (nether:nodebelow(addpos) == "nether:lava_flowing")) then
 						minetest.env:add_node(addpos, {name="nether:glowstone"})
-					--[[elseif (math.floor(math.random(0, GLOWSTONE_FREQ_LAVA)) == 1) and ((nether:nodebelow(addpos) == "nether:lava_source") or (nether:nodebelow(addpos) == "nether:lava_flowing")) then
-						minetest.env:add_node(addpos, {name="nether:glowstone"})
-						print("GLOWSTONE" .. "X:" .. addpos.x .. "Y:" .. addpos.y .. "Z:" .. addpos.z)]]
-					elseif (y == math.floor(math.random((NETHER_DEPTH-NETHER_RANDOM), NETHER_DEPTH))) and (nether:can_add_sticky_node(addpos) == true) then
-						minetest.env:add_node(addpos, {name="nether:netherrack"})
-					elseif (y == math.floor(math.random(NETHER_BOTTOM, (NETHER_BOTTOM+NETHER_RANDOM)))) and (nether:can_add_sticky_node(addpos) == true) then
-						minetest.env:add_node(addpos, {name="nether:netherrack"})
-					elseif y <= NETHER_DEPTH and y >= NETHER_BOTTOM then
-						minetest.env:add_node(addpos, {name="air"})
+					print("GLOWSTONE" .. "X:" .. addpos.x .. "Y:" .. addpos.y .. "Z:" .. addpos.z)]]
+				elseif (
+					(
+						y == NETHER_DEPTH-pr:next(0,NETHER_RANDOM)
+						and nether:can_add_sticky_node(addpos)
+					)
+					or
+					(
+						y == NETHER_BOTTOM+pr:next(0,NETHER_RANDOM)
+						and nether:can_add_sticky_node(addpos)
+					)
+				) then
+					data[p_addpos] = c_netherrack
+				elseif y <= NETHER_DEPTH and y >= NETHER_BOTTOM then
+					data[p_addpos] = c_air
+				end
+
+	-- Pass 2: Details
+				if y < NETHER_DEPTH and y > NETHER_BOTTOM then
+					if pr:next(1,NETHER_TREE_FREQ) == 1 and y == (NETHER_BOTTOM + 1) then
+						tab[num] = addpos
+						num = num+1
+					elseif pr:next(1,LAVA_FREQ) == 1 and y <= LAVA_Y then
+						data[p_addpos] = c_lava
 					end
 				end
 			end
 		end
-		-- Pass 2: Details
-		for x=minp.x, maxp.x, 1 do
-			for y=minp.y, maxp.y, 1 do
-				for z=minp.z, maxp.z, 1 do
+	end
+	vm:set_data(data)
+	vm:calc_lighting()
+	vm:update_liquids()
+	vm:write_to_map()
+	if trees_enabled then	--Trees:
+		for _,v in ipairs(tab) do
+			nether:grow_nethertree(v)
+		end
+	end
+	--[[ We don't want the Throne of Hades to get regenerated (especially since it will screw up portals)
+	if (minp.x <= HADES_THRONE_STARTPOS_ABS.x)
+	and (maxp.x >= HADES_THRONE_STARTPOS_ABS.x)
+	and (minp.y <= HADES_THRONE_STARTPOS_ABS.y)
+	and (maxp.y >= HADES_THRONE_STARTPOS_ABS.y)
+	and (minp.z <= HADES_THRONE_STARTPOS_ABS.z)
+	and (maxp.z >= HADES_THRONE_STARTPOS_ABS.z)
+	and (nether:fileexists(HADES_THRONE_GENERATED) == false) then
+		-- Pass 3: Make way for the Throne of Hades!
+		for x=(HADES_THRONE_STARTPOS_ABS.x - 1), (HADES_THRONE_ENDPOS_ABS.x + 1), 1 do
+			for z=(HADES_THRONE_STARTPOS_ABS.z - 1), (HADES_THRONE_ENDPOS_ABS.z + 1), 1 do
+				-- Notice I did not put a -1 for the beginning. This is because we don't want the throne to float
+				for y=HADES_THRONE_STARTPOS_ABS.y, (HADES_THRONE_ENDPOS_ABS.y + 1), 1 do
 					addpos = {x=x, y=y, z=z}
-					if y < NETHER_DEPTH and y > NETHER_BOTTOM then
-						if math.random(NETHER_TREE_FREQ) == 1 and y == (NETHER_BOTTOM + 1) then
-							nether:grow_nethertree(addpos)
-						elseif math.random(LAVA_FREQ) == 1 and y <= LAVA_Y then
-							minetest.env:add_node(addpos, {name="nether:lava_source"})
-						end
-					end
+					minetest.env:add_node(addpos, {name="air"})
 				end
 			end
 		end
-		-- We don't want the Throne of Hades to get regenerated (especially since it will screw up portals)
-		if (minp.x <= HADES_THRONE_STARTPOS_ABS.x) and (maxp.x >= HADES_THRONE_STARTPOS_ABS.x) and (minp.y <= HADES_THRONE_STARTPOS_ABS.y) and (maxp.y >= HADES_THRONE_STARTPOS_ABS.y) and (minp.z <= HADES_THRONE_STARTPOS_ABS.z) and (maxp.z >= HADES_THRONE_STARTPOS_ABS.z) and (nether:fileexists(HADES_THRONE_GENERATED) == false)
-		then
-			-- Pass 3: Make way for the Throne of Hades!
-			for x=(HADES_THRONE_STARTPOS_ABS.x - 1), (HADES_THRONE_ENDPOS_ABS.x + 1), 1 do
-				for z=(HADES_THRONE_STARTPOS_ABS.z - 1), (HADES_THRONE_ENDPOS_ABS.z + 1), 1 do
-					-- Notice I did not put a -1 for the beginning. This is because we don't want the throne to float
-					for y=HADES_THRONE_STARTPOS_ABS.y, (HADES_THRONE_ENDPOS_ABS.y + 1), 1 do
-						addpos = {x=x, y=y, z=z}
-						minetest.env:add_node(addpos, {name="air"})
-					end
-				end
+		-- Pass 4: Throne of Hades
+		for i,v in ipairs(HADES_THRONE_ABS) do
+			if v.portalblock == true then
+				NETHER_PORTALS_FROM_NETHER[table.getn(NETHER_PORTALS_FROM_NETHER)+1] = v.pos
+				nether:save_portal_from_nether(v.pos)
+				nether:createportal(v.pos)
+			else
+				minetest.env:add_node(v.pos, {name=v.block})
 			end
-			-- Pass 4: Throne of Hades
-			for i,v in ipairs(HADES_THRONE_ABS) do
-				if v.portalblock == true then
-					NETHER_PORTALS_FROM_NETHER[table.getn(NETHER_PORTALS_FROM_NETHER)+1] = v.pos
-					nether:save_portal_from_nether(v.pos)
-					nether:createportal(v.pos)
-				else
-					minetest.env:add_node(v.pos, {name=v.block})
-				end
-			end
-			nether:touch(HADES_THRONE_GENERATED)
 		end
+		nether:touch(HADES_THRONE_GENERATED)
+	end]]
+	if info then
+		local geninfo = string.format("[nether] done in: %.2fs", os.clock() - t1)
+		print(geninfo)
+		minetest.chat_send_all(geninfo)
 	end
 end)
 
@@ -614,7 +662,6 @@ end
 -- Check if we can add a "sticky" node (i.e. it has to stick to something else, or else it won't be added)
 -- This is largely based on Gilli's code
 function nether:can_add_sticky_node(pos)
-	local nodehere = false
 	local objname
 	for x = -1, 1 do
 		for y = -1, 1 do
@@ -622,13 +669,13 @@ function nether:can_add_sticky_node(pos)
 				local p = {x=pos.x+x, y=pos.y+y, z=pos.z+z}
 				local n = minetest.env:get_node(p)
 				objname = n.name
-				if objname ~= "air" and minetest.registered_nodes[objname].walkable == true then
-					nodehere = true
+				if minetest.registered_nodes[objname].walkable == true then
+					return true
 				end
 			end
 		end
 	end
-	return nodehere
+	return false
 end
 
 -- Add a "sticky" node
