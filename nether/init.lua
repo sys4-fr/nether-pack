@@ -27,8 +27,8 @@ GLOWSTONE_FREQ_LAVA = 2
 LAVA_FREQ = 100
 -- Maximum height of lava
 LAVA_HEIGHT = 2
--- Frequency of nether trees (higher is less frequent)
 NETHER_TREE_FREQ = 350
+NETHER_SHROOM_FREQ = 100
 -- Height of nether trees
 NETHER_TREESIZE = 2
 -- Frequency of apples in a nether tree (higher is less frequent)
@@ -42,36 +42,36 @@ NETHER_SPAWNPOS = {x=0, y=5, z=0}
 -- Throne of Hades
 HADES_THRONE = {
 	-- Lava Moat
-	{pos={x=-1,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=0}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=1}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=2}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=3}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=4}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=5}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=6}, block="nether:lava_source"},
-	{pos={x=-1,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=0,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=1,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=2,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=3,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=4,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=5,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=7}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=6}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=5}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=4}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=3}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=2}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=1}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=0}, block="nether:lava_source"},
-	{pos={x=6,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=5,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=4,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=3,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=2,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=1,y=-1,z=-1}, block="nether:lava_source"},
-	{pos={x=0,y=-1,z=-1}, block="nether:lava_source"},
+	{pos={x=-1,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=0}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=1}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=2}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=3}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=4}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=5}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=6}, block="default:lava_source"},
+	{pos={x=-1,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=0,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=1,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=2,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=3,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=4,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=5,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=7}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=6}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=5}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=4}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=3}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=2}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=1}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=0}, block="default:lava_source"},
+	{pos={x=6,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=5,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=4,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=3,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=2,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=1,y=-1,z=-1}, block="default:lava_source"},
+	{pos={x=0,y=-1,z=-1}, block="default:lava_source"},
 	-- Floor 1
 	{pos={x=0,y=0,z=0}, block="nether:netherrack"},
 	{pos={x=0,y=0,z=1}, block="nether:netherrack"},
@@ -206,34 +206,34 @@ HADES_THRONE = {
 	{pos={x=2,y=4,z=6}, block="nether:netherrack"},
 	{pos={x=3,y=4,z=6}, block="nether:netherrack"},
 	-- Torches on floor 5
-	{pos={x=0,y=4,z=4}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=4}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=5}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=5}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=4}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=4}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=5}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=5}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=0}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=0}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=1}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=1}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=0}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=0}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=1}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=1}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=2}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=2}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=3}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=3}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=2}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=2}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=3}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=3}, block="nether:nether_torch_bottom"},
-	{pos={x=4,y=4,z=6}, block="nether:nether_torch_bottom"},
-	{pos={x=5,y=4,z=6}, block="nether:nether_torch_bottom"},
-	{pos={x=0,y=4,z=6}, block="nether:nether_torch_bottom"},
-	{pos={x=1,y=4,z=6}, block="nether:nether_torch_bottom"},
+	{pos={x=0,y=4,z=4}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=4}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=5}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=5}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=4}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=4}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=5}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=5}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=0}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=0}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=1}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=1}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=0}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=0}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=1}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=1}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=2}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=2}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=3}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=3}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=2}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=2}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=3}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=3}, block="nether:torch_bottom"},
+	{pos={x=4,y=4,z=6}, block="nether:torch_bottom"},
+	{pos={x=5,y=4,z=6}, block="nether:torch_bottom"},
+	{pos={x=0,y=4,z=6}, block="nether:torch_bottom"},
+	{pos={x=1,y=4,z=6}, block="nether:torch_bottom"},
 	-- Nether Portal
 	{pos={x=1,y=5,z=6}, portalblock=true},
 }
@@ -254,8 +254,8 @@ NETHER_PORTAL = {
 	{pos={x=3,y=0,z=-1}, block="default:obsidian"},
 	-- Floor 2
 	{pos={x=0,y=1,z=0}, block="default:obsidian"},
-	{pos={x=1,y=1,z=0}, block="nether:nether_portal"},
-	{pos={x=2,y=1,z=0}, block="nether:nether_portal"},
+	{pos={x=1,y=1,z=0}, block="nether:portal"},
+	{pos={x=2,y=1,z=0}, block="nether:portal"},
 	{pos={x=3,y=1,z=0}, block="default:obsidian"},
 	{pos={x=0,y=1,z=1}, block="default:obsidian"},
 	{pos={x=3,y=1,z=1}, block="default:obsidian"},
@@ -263,8 +263,8 @@ NETHER_PORTAL = {
 	{pos={x=3,y=1,z=-1}, block="default:obsidian"},
 	-- Floor 3
 	{pos={x=0,y=2,z=0}, block="default:obsidian"},
-	{pos={x=1,y=2,z=0}, block="nether:nether_portal"},
-	{pos={x=2,y=2,z=0}, block="nether:nether_portal"},
+	{pos={x=1,y=2,z=0}, block="nether:portal"},
+	{pos={x=2,y=2,z=0}, block="nether:portal"},
 	{pos={x=3,y=2,z=0}, block="default:obsidian"},
 	{pos={x=0,y=2,z=1}, block="default:obsidian"},
 	{pos={x=3,y=2,z=1}, block="default:obsidian"},
@@ -272,8 +272,8 @@ NETHER_PORTAL = {
 	{pos={x=3,y=2,z=-1}, block="default:obsidian"},
 	-- Floor 4
 	{pos={x=0,y=3,z=0}, block="default:obsidian"},
-	{pos={x=1,y=3,z=0}, block="nether:nether_portal"},
-	{pos={x=2,y=3,z=0}, block="nether:nether_portal"},
+	{pos={x=1,y=3,z=0}, block="nether:portal"},
+	{pos={x=2,y=3,z=0}, block="nether:portal"},
 	{pos={x=3,y=3,z=0}, block="default:obsidian"},
 	{pos={x=0,y=3,z=1}, block="default:obsidian"},
 	{pos={x=3,y=3,z=1}, block="default:obsidian"},
@@ -386,7 +386,7 @@ minetest.register_node("nether:lava_flowing", {
 	buildable_to = true,
 	liquidtype = "flowing",
 	liquid_alternative_flowing = "nether:lava_flowing",
-	liquid_alternative_source = "nether:lava_source",
+	liquid_alternative_source = "default:lava_source",
 	liquid_viscosity = LAVA_VISC,
 	damage_per_second = 4*2,
 	post_effect_color = {a=192, r=255, g=64, b=0},
@@ -410,7 +410,7 @@ minetest.register_node("nether:lava_source", {
 	buildable_to = true,
 	liquidtype = "source",
 	liquid_alternative_flowing = "nether:lava_flowing",
-	liquid_alternative_source = "nether:lava_source",
+	liquid_alternative_source = "default:lava_source",
 	liquid_viscosity = LAVA_VISC,
 	damage_per_second = 4*2,
 	post_effect_color = {a=192, r=255, g=64, b=0},
@@ -425,35 +425,32 @@ minetest.register_node("nether:lava_source", {
 minetest.register_node("nether:netherrack", {
 	description = "Netherrack",
 	tile_images = {"nether_netherrack.png"},
-	is_ground_content = true,
 	groups = {cracky=3, oddly_breakable_by_hand=3},
 	drop = "nether:netherrack",
 	sounds = default.node_sound_stone_defaults(),
 })
 
 -- Nether tree
-minetest.register_node("nether:nether_tree", {
+minetest.register_node("nether:tree", {
 	description = "Nether Tree",
 	tile_images = {"nether_tree_top.png", "nether_tree_top.png", "nether_tree.png"},
-	is_ground_content = true,
 	groups = {tree=1, snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
 
 -- Nether leaves
-minetest.register_node("nether:nether_leaves", {
+minetest.register_node("nether:leaves", {
 	description = "Nether Leaves",
 	drawtype = "allfaces_optional",
-	visual_scale = 1.3,
+--	visual_scale = 1.189, --scale^2=sqrt(2)
 	tile_images = {"nether_leaves.png"},
 	paramtype = "light",
 	groups = {snappy=3, leafdecay=2},
-	drop = "nether:nether_leaves",
 	sounds = default.node_sound_leaves_defaults(),
 })
 
 -- Nether apple
-minetest.register_node("nether:nether_apple", {
+minetest.register_node("nether:apple", {
 	description = "Nether Apple",
 	drawtype = "plantlike",
 	visual_scale = 1.0,
@@ -467,8 +464,30 @@ minetest.register_node("nether:nether_apple", {
 	sounds = default.node_sound_defaults(),
 })
 
+-- Nether vine
+minetest.register_node("nether:vine", {
+	description = "Nether vine",
+	walkable = false,
+	drop = '',
+	sunlight_propagates = true,
+	paramtype = "light",
+	tile_images = { "nether_vine.png" },
+	drawtype = "plantlike",
+	inventory_image = "nether_vine.png",
+	groups = { snappy = 3,flammable=2 },
+	sounds = default.node_sound_leaves_defaults(),
+	after_dig_node = function(pos)
+		local p = {x=pos.x, y=pos.y-1, z=pos.z}
+		local vine = "nether:vine"
+		while minetest.env:get_node(p).name == vine do
+			minetest.env:remove_node(p)
+			p.y = p.y-1
+		end
+	end 
+})
+
 -- Nether torch
-minetest.register_node("nether:nether_torch", {
+minetest.register_node("nether:torch", {
 	description = "Nether Torch",
 	drawtype = "torchlike",
 	tile_images = {"nether_torch_on_floor.png", "nether_torch_on_ceiling.png", "nether_torch.png"},
@@ -491,7 +510,7 @@ minetest.register_node("nether:nether_torch", {
 })
 
 -- Nether torch (only shows the bottom torch. This is a hack)
-minetest.register_node("nether:nether_torch_bottom", {
+minetest.register_node("nether:torch_bottom", {
 	description = "Nether Torch Bottom Side (you hacker!)",
 	drawtype = "torchlike",
 	tile_images = {"nether_torch_on_floor.png", "nether_torch_on_floor.png", "nether_torch_on_floor.png"},
@@ -502,7 +521,7 @@ minetest.register_node("nether:nether_torch_bottom", {
 	sunlight_propagates = true,
 	walkable = false,
 	light_source = LIGHT_MAX - 1,
-	drop = "nether:nether_torch",
+	drop = "nether:torch",
 	selection_box = {
 		type = "wallmounted",
 		wall_top = {-0.1, -0.5, -0.1, 0.1, -0.5+0.6, 0.1},
@@ -515,7 +534,7 @@ minetest.register_node("nether:nether_torch_bottom", {
 })
 
 -- Nether Pearl
-minetest.register_craftitem("nether:nether_pearl", {
+minetest.register_craftitem("nether:pearl", {
 	description = "Nether Pearl",
 	wield_image = "nether_pearl.png",
 	inventory_image = "nether_pearl.png",
@@ -524,37 +543,30 @@ minetest.register_craftitem("nether:nether_pearl", {
 	textures = {"nether_pearl.png"},
 })
 
--- Nether Glowstone (Thanks to Gilli)
-minetest.register_node( "nether:glowstone", { 
-	description = "Nether Glowstone",
-	tile_images = {"nether_glowstone.png"},
-	light_source = 15, -- Like in Minecraft
-	inventory_inventory_image = minetest.inventorycube( "nether_glowstone.png" ),
-	is_ground_content = true,
-	groups = {snappy=2, choppy=2, oddly_breakable_by_hand = 1.5},
-})
-
 local c_air = minetest.get_content_id("air")
 local c_netherrack = minetest.get_content_id("nether:netherrack")
-local c_glowstone = minetest.get_content_id("nether:glowstone")
+local c_glowstone = minetest.get_content_id("glow:stone") --https://github.com/Zeg9/minetest-glow
 local c_lava = minetest.get_content_id("default:lava_source")
+local c_nether_shroom = minetest.get_content_id("riesenpilz:nether_shroom")
+local c_nether_vine = minetest.get_content_id("nether:vine")
 
 local info = true
 local trees_enabled = true
+local vine_maxlength = math.floor(NETHER_HEIGHT/4+0.5)
 -- Create the Nether
 minetest.register_on_generated(function(minp, maxp, seed)
-	local addpos = {}
-	hadesthronecounter = 1
-	if not (maxp.y >= NETHER_BOTTOM and minp.y <= NETHER_DEPTH) then
+	if not (maxp.y >= NETHER_BOTTOM-100 and minp.y <= NETHER_DEPTH+100) then --avoid big map generation
 		return
 	end
+	local addpos = {}
 
 	if info then
 		t1 = os.clock()
-		local geninfo = "[nether] tries to generate at: x=["..minp.x.."; "..maxp.x.."]; y=["..minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]"
+		local geninfo = "[nether] generates at: x=["..minp.x.."; "..maxp.x.."]; y=["..minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]"
 		print(geninfo)
 		minetest.chat_send_all(geninfo)
 	end
+
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local data = vm:get_data()
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
@@ -563,48 +575,75 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local num = 1
 	local tab = {}
 
-	-- Pass 1: Terrain generation
+	local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
+	local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
+	local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
+
 	for x=minp.x, maxp.x, 1 do
 		for z=minp.z, maxp.z, 1 do
-			for y=minp.y, maxp.y, 1 do
-				addpos = {x=x, y=y, z=z}
-				p_addpos = area:index(x, y, z)
-				d_p_addpos = data[p_addpos]
-				if (y == NETHER_DEPTH or y == NETHER_BOTTOM) then
-					data[p_addpos] = c_netherrack
-				elseif pr:next(0,GLOWSTONE_FREQ_ROOF) == 1
-				and y >= NETHER_ROOF_ABS-1
-				and nether:can_add_sticky_node(addpos) then
-					data[p_addpos] = c_glowstone
-					--[[elseif (math.floor(math.random(0, GLOWSTONE_FREQ_LAVA)) == 1)
-						and ((nether:nodebelow(addpos) == "nether:lava_source") or (nether:nodebelow(addpos) == "nether:lava_flowing")) then
-						minetest.env:add_node(addpos, {name="nether:glowstone"})
-					print("GLOWSTONE" .. "X:" .. addpos.x .. "Y:" .. addpos.y .. "Z:" .. addpos.z)]]
-				elseif (
-					(
-						y == NETHER_DEPTH-pr:next(0,NETHER_RANDOM)
-						and nether:can_add_sticky_node(addpos)
-					)
-					or
-					(
-						y == NETHER_BOTTOM+pr:next(0,NETHER_RANDOM)
-						and nether:can_add_sticky_node(addpos)
-					)
-				) then
-					data[p_addpos] = c_netherrack
-				elseif y <= NETHER_DEPTH and y >= NETHER_BOTTOM then
-					data[p_addpos] = c_air
-				end
 
-	-- Pass 2: Details
-				if y < NETHER_DEPTH and y > NETHER_BOTTOM then
-					if pr:next(1,NETHER_TREE_FREQ) == 1 and y == (NETHER_BOTTOM + 1) then
-						tab[num] = addpos
-						num = num+1
-					elseif pr:next(1,LAVA_FREQ) == 1 and y <= LAVA_Y then
+			local r_tree = pr:next(1,NETHER_TREE_FREQ)
+			local r_shroom = pr:next(1,NETHER_SHROOM_FREQ)
+			local r_glowstone = pr:next(0,GLOWSTONE_FREQ_ROOF)
+			local r_vine_length = pr:next(1,vine_maxlength)
+
+			local test = perlin1:get2d({x=x, y=z})+1
+			local test2 = perlin2:get2d({x=x, y=z})
+			local test3 = math.abs(perlin3:get2d({x=x, y=z}))
+
+			local t = math.floor(test*3+0.5)
+
+			if test2 < 0 then
+				h = math.floor(test2*3+0.5)-1
+			else
+				h = 3+t+pr:next(0,NETHER_RANDOM)
+			end
+
+			local generate_vine = false
+			if test3 >= 0.72+pr:next(0,NETHER_RANDOM)/10
+			and pr:next(0,NETHER_RANDOM) == 1 then
+				generate_vine = true
+			end
+
+			local bottom = NETHER_BOTTOM+h
+			local top = NETHER_DEPTH-pr:next(0,NETHER_RANDOM)+t
+
+			for y=minp.y, maxp.y, 1 do
+				local addpos = {x=x, y=y-1, z=z}
+				local p_addpos = area:index(x, y, z)
+				if y <= NETHER_BOTTOM then
+					if y <= bottom then
+						data[p_addpos] = c_netherrack
+					else
 						data[p_addpos] = c_lava
 					end
+				elseif r_tree == 1
+				and y == bottom then
+					tab[num] = addpos
+					num = num+1
+				elseif y <= bottom then
+					if pr:next(1,LAVA_FREQ) == 1 then
+						data[p_addpos] = c_lava
+					else
+						data[p_addpos] = c_netherrack
+					end
+				elseif r_shroom == 1
+				and r_tree ~= 1
+				and y == bottom+1 then
+					data[p_addpos] = c_nether_shroom
+				elseif (y == top
+				and r_glowstone == 1) then
+					data[p_addpos] = c_glowstone
+				elseif y >= top then
+					data[p_addpos] = c_netherrack
+				elseif y <= top-1
+				and generate_vine
+				and y >= top-r_vine_length then
+					data[p_addpos] = c_nether_vine
+				else
+					data[p_addpos] = c_air
 				end
+--				d_p_addpos = data[p_addpos]
 			end
 		end
 	end
@@ -654,6 +693,45 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end
 end)
 
+--[[minetest.register_on_generated(function(minp, maxp, seed)
+	if minp.y <= 99 then
+		return
+	end
+	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+	local data = vm:get_data()
+	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
+
+	local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
+	local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
+	for x=minp.x, maxp.x, 1 do
+		for z=minp.z, maxp.z, 1 do
+			local test = perlin1:get2d({x=x, y=z})+1
+			local test2 = perlin2:get2d({x=x, y=z})
+--			print(test)
+			if test2 < 0 then
+				h = 200+math.floor(test2*3+0.5)
+			else
+				h = 203+math.floor(test*3+0.5)
+			end
+			for y=minp.y, maxp.y, 1 do
+				p_addpos = area:index(x, y, z)
+				if y <= h then
+					data[p_addpos] = c_netherrack
+				elseif y <= 201 then
+					data[p_addpos] = c_lava
+				end
+			end
+		end
+	end
+
+	vm:set_data(data)
+	--vm:set_lighting({day=0, night=0})
+	vm:calc_lighting()
+	vm:update_liquids()
+	vm:write_to_map()
+end)]]
+
+
 -- Return the name of the node below a position
 function nether:nodebelow(pos)
 	return minetest.env:get_node({x=pos.x, y=(pos.y-1), z=pos.z}).name
@@ -695,7 +773,7 @@ function nether:grow_nethertree(pos)
 	local trunkpos={x=pos.x, z=pos.z}
 	for y=pos.y, pos.y+4+math.random(2) do
 		trunkpos.y=y
-		minetest.env:add_node(trunkpos, {name="nether:nether_tree"})
+		minetest.env:add_node(trunkpos, {name="nether:tree"})
 	end
 	--LEAVES
 	local leafpos={}
@@ -712,10 +790,10 @@ function nether:grow_nethertree(pos)
 							if math.random(NETHER_HEAL_APPLE_FREQ) == 1 then
 								minetest.env:add_node(leafpos, {name="default:apple"})
 							else
-								minetest.env:add_node(leafpos, {name="nether:nether_apple"})
+								minetest.env:add_node(leafpos, {name="nether:apple"})
 							end
 						else
-							minetest.env:add_node(leafpos, {name="nether:nether_leaves"})
+							minetest.env:add_node(leafpos, {name="nether:leaves"})
 						end				
 					end				
 				end
@@ -955,13 +1033,13 @@ function nether:createportal(pos)
 end
 
 -- Portal Creator
-minetest.register_node("nether:nether_portal_creator", {
+minetest.register_node("nether:portal_creator", {
 	tile_images = {"nether_portal_creator.png"},
 	description = "Nether Portal Creator",
 })
 
 minetest.register_on_placenode(function(pos, node)
-	if node.name == "nether:nether_portal_creator" then
+	if node.name == "nether:portal_creator" then
 		if nether:inside_nether(pos) then
 			NETHER_PORTALS_FROM_NETHER[table.getn(NETHER_PORTALS_FROM_NETHER)+1] = pos
 			nether:save_portal_from_nether(pos)
@@ -975,7 +1053,7 @@ minetest.register_on_placenode(function(pos, node)
 end)
 
 minetest.register_abm({
-	nodenames = "nether:nether_portal_creator",
+	nodenames = "nether:portal_creator",
 	interval = 1.0,
 	chance = 1,
 	action = function(pos)
@@ -984,7 +1062,7 @@ minetest.register_abm({
 })
 
 -- Portal Stuff
-minetest.register_node("nether:nether_portal", {
+minetest.register_node("nether:portal", {
 	description = "Nether Portal",
 	drawtype = "glasslike",
 	tile_images = {"nether_portal_stuff.png"},
@@ -1002,7 +1080,7 @@ minetest.register_node("nether:nether_portal", {
 })
 
 minetest.register_abm({
-	nodenames = {"nether:nether_portal"},
+	nodenames = {"nether:portal"},
 	interval = 1.0,
 	chance = 1,
 	action = function(pos, node)
@@ -1031,10 +1109,10 @@ minetest.register_abm({
 
 -- CRAFTING DEFINITIONS
 minetest.register_craft({
-	output = "nether:nether_portal_creator",
+	output = "nether:portal_creator",
 	recipe = {
 		{"default:obsidian", "default:obsidian", "default:obsidian"},
-		{"default:obsidian", "nether:nether_pearl", "default:obsidian"},
+		{"default:obsidian", "nether:pearl", "default:obsidian"},
 		{"default:obsidian", "default:obsidian", "default:obsidian"},
 	}
 })
