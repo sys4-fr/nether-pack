@@ -377,7 +377,7 @@ minetest.register_node("nether:lava_flowing", {
 	description = "Nether Lava (flowing)",
 	inventory_image = minetest.inventorycube("default_lava.png"),
 	drawtype = "flowingliquid",
-	tile_images = {"default_lava.png"},
+	tiles = {"default_lava.png"},
 	paramtype = "light",
 	light_source = LIGHT_MAX - 1,
 	walkable = false,
@@ -401,7 +401,7 @@ minetest.register_node("nether:lava_source", {
 	description = "Nether Lava",
 	inventory_image = minetest.inventorycube("default_lava.png"),
 	drawtype = "liquid",
-	tile_images = {"default_lava.png"},
+	tiles = {"default_lava.png"},
 	paramtype = "light",
 	light_source = LIGHT_MAX - 1,
 	walkable = false,
@@ -424,7 +424,7 @@ minetest.register_node("nether:lava_source", {
 -- Netherrack
 minetest.register_node("nether:netherrack", {
 	description = "Netherrack",
-	tile_images = {"nether_netherrack.png"},
+	tiles = {"nether_netherrack.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=3},
 	drop = "nether:netherrack",
 	sounds = default.node_sound_stone_defaults(),
@@ -433,7 +433,7 @@ minetest.register_node("nether:netherrack", {
 -- Nether tree
 minetest.register_node("nether:tree", {
 	description = "Nether Tree",
-	tile_images = {"nether_tree_top.png", "nether_tree_top.png", "nether_tree.png"},
+	tiles = {"nether_tree_top.png", "nether_tree_top.png", "nether_tree.png"},
 	groups = {tree=1, snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
@@ -443,7 +443,7 @@ minetest.register_node("nether:leaves", {
 	description = "Nether Leaves",
 	drawtype = "allfaces_optional",
 --	visual_scale = 1.189, --scale^2=sqrt(2)
-	tile_images = {"nether_leaves.png"},
+	tiles = {"nether_leaves.png"},
 	paramtype = "light",
 	groups = {snappy=3, leafdecay=2},
 	sounds = default.node_sound_leaves_defaults(),
@@ -454,7 +454,7 @@ minetest.register_node("nether:apple", {
 	description = "Nether Apple",
 	drawtype = "plantlike",
 	visual_scale = 1.0,
-	tile_images = {"nether_apple.png"},
+	tiles = {"nether_apple.png"},
 	inventory_image = "nether_apple.png",
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -471,7 +471,7 @@ minetest.register_node("nether:vine", {
 	drop = '',
 	sunlight_propagates = true,
 	paramtype = "light",
-	tile_images = { "nether_vine.png" },
+	tiles = { "nether_vine.png" },
 	drawtype = "plantlike",
 	inventory_image = "nether_vine.png",
 	groups = { snappy = 3,flammable=2 },
@@ -490,7 +490,7 @@ minetest.register_node("nether:vine", {
 minetest.register_node("nether:torch", {
 	description = "Nether Torch",
 	drawtype = "torchlike",
-	tile_images = {"nether_torch_on_floor.png", "nether_torch_on_ceiling.png", "nether_torch.png"},
+	tiles = {"nether_torch_on_floor.png", "nether_torch_on_ceiling.png", "nether_torch.png"},
 	inventory_image = "nether_torch_on_floor.png",
 	wield_image = "nether_torch_on_floor.png",
 	paramtype = "light",
@@ -513,7 +513,7 @@ minetest.register_node("nether:torch", {
 minetest.register_node("nether:torch_bottom", {
 	description = "Nether Torch Bottom Side (you hacker!)",
 	drawtype = "torchlike",
-	tile_images = {"nether_torch_on_floor.png", "nether_torch_on_floor.png", "nether_torch_on_floor.png"},
+	tiles = {"nether_torch_on_floor.png", "nether_torch_on_floor.png", "nether_torch_on_floor.png"},
 	inventory_image = "nether_torch_on_floor.png",
 	wield_image = "nether_torch_on_floor.png",
 	paramtype = "light",
@@ -1034,7 +1034,7 @@ end
 
 -- Portal Creator
 minetest.register_node("nether:portal_creator", {
-	tile_images = {"nether_portal_creator.png"},
+	tiles = {"nether_portal_creator.png"},
 	description = "Nether Portal Creator",
 })
 
@@ -1065,7 +1065,7 @@ minetest.register_abm({
 minetest.register_node("nether:portal", {
 	description = "Nether Portal",
 	drawtype = "glasslike",
-	tile_images = {"nether_portal_stuff.png"},
+	tiles = {"nether_portal_stuff.png"},
 	inventory_image = "nether_portal_stuff.png",
 	wield_image = "nether_portal_stuff.png",
 	light_source = LIGHT_MAX - 2,
