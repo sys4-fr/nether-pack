@@ -296,6 +296,23 @@ NETHER_PORTAL = {
 
 --== END OF EDITABLE OPTIONS ==--
 
+local function r_area(manip, width, height, pos)
+	local emerged_pos1, emerged_pos2 = manip:read_from_map(
+		{x=pos.x-width, y=pos.y, z=pos.z-width},
+		{x=pos.x+width, y=pos.y+height, z=pos.z+width}
+	)
+	return VoxelArea:new({MinEdge=emerged_pos1, MaxEdge=emerged_pos2})
+end
+
+local function set_vm_data(manip, nodes, pos, t1, name)
+	manip:set_data(nodes)
+	manip:write_to_map()
+	print(string.format("[nether] "..name.." grew at ("..pos.x.."|"..pos.y.."|"..pos.z..") after ca. %.2fs", os.clock() - t1))
+	local t1 = os.clock()
+	manip:update_map()
+	print(string.format("[nether] map updated after ca. %.2fs", os.clock() - t1))
+end
+
 -- Generated variables
 NETHER_BOTTOM = (NETHER_DEPTH - NETHER_HEIGHT)
 NETHER_ROOF_ABS = (NETHER_DEPTH - NETHER_RANDOM)
@@ -372,7 +389,7 @@ function nether:inside_nether(pos)
 	return false
 end
 
--- Nether Lava
+--[[ Nether Lava
 minetest.register_node("nether:lava_flowing", {
 	description = "Nether Lava (flowing)",
 	inventory_image = minetest.inventorycube("default_lava.png"),
@@ -419,22 +436,43 @@ minetest.register_node("nether:lava_source", {
 		{image="default_lava.png", backface_culling=false},
 	},
 	groups = {lava=3, liquid=2, hot=3},
-})
+})]]
 
 -- Netherrack
 minetest.register_node("nether:netherrack", {
 	description = "Netherrack",
 	tiles = {"nether_netherrack.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=3},
-	drop = "nether:netherrack",
+	sounds = default.node_sound_stone_defaults(),
+})
+
+-- Netherbrick
+minetest.register_node("nether:netherrack_brick", {
+	description = "Netherrack Brick",
+	tiles = {"nether_netherrack.png^nether_brick_shadow.png"},
+	groups = {cracky=3, oddly_breakable_by_hand=3},
 	sounds = default.node_sound_stone_defaults(),
 })
 
 -- Nether tree
-minetest.register_node("nether:tree", {
-	description = "Nether Tree",
-	tiles = {"nether_tree_top.png", "nether_tree_top.png", "nether_tree.png"},
-	groups = {tree=1, snappy=2, choppy=2, oddly_breakable_by_hand=1},
+minetest.register_node("nether:blood", {
+	description = "Nether Blood",
+	tiles = {"nether_blood.png"},
+	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
+	sounds = default.node_sound_wood_defaults(),
+})
+
+minetest.register_node("nether:blood_top", {
+	description = "Nether Blood",
+	tiles = {"nether_blood_top.png", "nether_blood.png", "nether_blood.png^nether_blood_side.png"},
+	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
+	sounds = default.node_sound_wood_defaults(),
+})
+
+minetest.register_node("nether:blood_stem", {
+	description = "Nether Blood Stem",
+	tiles = {"nether_blood_stem_top.png", "nether_blood_stem_top.png", "nether_blood_stem.png"},
+	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
 
@@ -453,7 +491,6 @@ minetest.register_node("nether:leaves", {
 minetest.register_node("nether:apple", {
 	description = "Nether Apple",
 	drawtype = "plantlike",
-	visual_scale = 1.0,
 	tiles = {"nether_apple.png"},
 	inventory_image = "nether_apple.png",
 	paramtype = "light",
@@ -479,8 +516,8 @@ minetest.register_node("nether:vine", {
 	after_dig_node = function(pos)
 		local p = {x=pos.x, y=pos.y-1, z=pos.z}
 		local vine = "nether:vine"
-		while minetest.env:get_node(p).name == vine do
-			minetest.env:remove_node(p)
+		while minetest.get_node(p).name == vine do
+			minetest.remove_node(p)
 			p.y = p.y-1
 		end
 	end 
@@ -670,7 +707,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				-- Notice I did not put a -1 for the beginning. This is because we don't want the throne to float
 				for y=HADES_THRONE_STARTPOS_ABS.y, (HADES_THRONE_ENDPOS_ABS.y + 1), 1 do
 					addpos = {x=x, y=y, z=z}
-					minetest.env:add_node(addpos, {name="air"})
+					minetest.add_node(addpos, {name="air"})
 				end
 			end
 		end
@@ -681,7 +718,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				nether:save_portal_from_nether(v.pos)
 				nether:createportal(v.pos)
 			else
-				minetest.env:add_node(v.pos, {name=v.block})
+				minetest.add_node(v.pos, {name=v.block})
 			end
 		end
 		nether:touch(HADES_THRONE_GENERATED)
@@ -734,7 +771,7 @@ end)]]
 
 -- Return the name of the node below a position
 function nether:nodebelow(pos)
-	return minetest.env:get_node({x=pos.x, y=(pos.y-1), z=pos.z}).name
+	return minetest.get_node({x=pos.x, y=(pos.y-1), z=pos.z}).name
 end
 
 -- Check if we can add a "sticky" node (i.e. it has to stick to something else, or else it won't be added)
@@ -745,7 +782,7 @@ function nether:can_add_sticky_node(pos)
 		for y = -1, 1 do
 			for z = -1, 1 do
 				local p = {x=pos.x+x, y=pos.y+y, z=pos.z+z}
-				local n = minetest.env:get_node(p)
+				local n = minetest.get_node(p)
 				objname = n.name
 				if minetest.registered_nodes[objname].walkable == true then
 					return true
@@ -759,21 +796,73 @@ end
 -- Add a "sticky" node
 function nether:add_sticky_node(pos, opts)
 	if nether:can_add_sticky_node(pos) == true then
-		minetest.env:add_node(pos, opts)
+		minetest.add_node(pos, opts)
 		return true
 	else
 		return false
 	end
 end
 
--- Create a nether tree
+
+local nether_c_blood = minetest.get_content_id("nether:blood")
+local nether_c_blood_top = minetest.get_content_id("nether:blood_top")
+local nether_c_blood_stem = minetest.get_content_id("nether:blood_stem")
+local nether_c_apple = minetest.get_content_id("default:apple")
+local nether_c_nether_apple = minetest.get_content_id("nether:apple")
+
+function nether:grow_nethertree(pos)
+	local t1 = os.clock()
+	local height = 6
+	local manip = minetest.get_voxel_manip()
+	local area = r_area(manip, 2, height, pos)
+	local nodes = manip:get_data()
+
+	for i = 0, height-1 do
+		nodes[area:index(pos.x, pos.y+i, pos.z)] = nether_c_blood_stem
+	end
+
+	for i = -1,1 do
+		for j = -1,1 do
+			nodes[area:index(pos.x+i, pos.y+height, pos.z+j)] = nether_c_blood_top
+		end
+	end
+
+	for k = -1, 1, 2 do
+		for l = -2+1, 2 do
+			local p1 = {pos.x+2*k, pos.y+height, pos.z-l*k}
+			local p2 = {pos.x+l*k, pos.y+height, pos.z+2*k}
+			local udat = nether_c_blood_top
+			if math.random(2) == 1 then
+				nodes[area:index(p1[1], p1[2], p1[3])] = nether_c_blood_top
+				nodes[area:index(p2[1], p2[2], p2[3])] = nether_c_blood_top
+				udat = nether_c_blood
+			end
+			nodes[area:index(p1[1], p1[2]-1, p1[3])] = udat
+			nodes[area:index(p2[1], p2[2]-1, p2[3])] = udat
+		end
+		for l = 0, 1 do
+			for _,p in ipairs({
+				{pos.x+k, pos.y+height-1, pos.z-l*k},
+				{pos.x+l*k, pos.y+height-1, pos.z+k},
+			}) do
+				if math.random(2) == 1 then
+					nodes[area:index(p[1], p[2], p[3])] = nether_c_nether_apple
+				elseif math.random(10) == 1 then
+					nodes[area:index(p[1], p[2], p[3])] = nether_c_apple
+				end
+			end
+		end
+	end
+	set_vm_data(manip, nodes, pos, t1, "blood")
+end
+--[[ Create a nether tree
 function nether:grow_nethertree(pos)
 	--TRUNK
 	pos.y=pos.y+1
 	local trunkpos={x=pos.x, z=pos.z}
 	for y=pos.y, pos.y+4+math.random(2) do
 		trunkpos.y=y
-		minetest.env:add_node(trunkpos, {name="nether:tree"})
+		minetest.add_node(trunkpos, {name="nether:tree"})
 	end
 	--LEAVES
 	local leafpos={}
@@ -785,22 +874,22 @@ function nether:grow_nethertree(pos)
 				+(z-trunkpos.z)*(z-trunkpos.z)
 				<= NETHER_TREESIZE*NETHER_TREESIZE + NETHER_TREESIZE then
 					leafpos={x=x, y=y, z=z}
-					if minetest.env:get_node(leafpos).name=="air" then
+					if minetest.get_node(leafpos).name=="air" then
 						if math.random(NETHER_APPLE_FREQ) == 1 then
 							if math.random(NETHER_HEAL_APPLE_FREQ) == 1 then
-								minetest.env:add_node(leafpos, {name="default:apple"})
+								minetest.add_node(leafpos, {name="default:apple"})
 							else
-								minetest.env:add_node(leafpos, {name="nether:apple"})
+								minetest.add_node(leafpos, {name="nether:apple"})
 							end
 						else
-							minetest.env:add_node(leafpos, {name="nether:leaves"})
+							minetest.add_node(leafpos, {name="nether:leaves"})
 						end				
 					end				
 				end
 			end
 		end
 	end
-end
+end]]
 
 -- == PORTAL RELATED STUFF ==
 NETHER_PORTALS_TO_NETHER = {}
@@ -1028,7 +1117,7 @@ function nether:createportal(pos)
 		curry = v.pos.y + pos.y
 		currz = v.pos.z + pos.z
 		currpos = {x=currx, y=curry, z=currz}
-		minetest.env:add_node(currpos, {name=v.block})
+		minetest.add_node(currpos, {name=v.block})
 	end
 end
 
@@ -1054,7 +1143,7 @@ end)
 
 minetest.register_abm({
 	nodenames = "nether:portal_creator",
-	interval = 1.0,
+	interval = 1,
 	chance = 1,
 	action = function(pos)
 		nether:createportal(pos)
@@ -1071,32 +1160,68 @@ minetest.register_node("nether:portal", {
 	light_source = LIGHT_MAX - 2,
 	paramtype = "light",
 	sunlight_propagates = true,
+	use_texture_alpha = true,
 	walkable = false,
-	groups = {choppy=2,dig_immediate=3},
+	digable = false,
+	pointable = false,
 	legacy_wallmounted = false,
-	buildable_to = true,
-	post_effect_color = {a=64, r=150, g=100, b=200},
+--	buildable_to = true,
+	drop = "",
+	groups = {not_in_creative_inventory=1},
+	post_effect_color = {a=200, r=50, g=0, b=60},
 	metadata_name = "generic"
 })
 
 minetest.register_abm({
 	nodenames = {"nether:portal"},
-	interval = 1.0,
+	interval = 1,
 	chance = 1,
 	action = function(pos, node)
-		local nodemeta = minetest.env:get_meta(pos)
-		local objs = minetest.env:get_objects_inside_radius(pos, 1)
+		minetest.add_particlespawner(
+			32, --amount
+			4, --time
+			{x=pos.x-0.47, y=pos.y-0.5, z=pos.z-1}, --minpos
+			{x=pos.x+0.47, y=pos.y+0.34, z=pos.z+1}, --maxpos
+			{x=0, y=1, z=0}, --minvel
+			{x=0, y=2, z=0}, --maxvel
+			{x=-0.5,y=-3,z=-0.3}, --minacc
+			{x=0.5,y=-0.4,z=0.3}, --maxacc
+			1, --minexptime
+			2, --maxexptime
+			0.4, --minsize
+			3, --maxsize
+			true, --collisiondetection
+			"nether_portal_particle.png" --texture
+		)
+		local objs = minetest.get_objects_inside_radius(pos, 1)
 		if objs[1] ~= nil then
-			for k, obj in pairs(objs) do
+			local nodemeta = minetest.get_meta(pos)
+			for _,obj in pairs(objs) do
 				local objpos = obj:getpos()
-				local objmeta = minetest.env:get_meta(objpos)
-				if objpos.y>pos.y-1 and objpos.y<pos.y and obj:get_player_name() ~= nil and obj:get_player_name() ~= "" then
+				local objmeta = minetest.get_meta(objpos)
+				local objplayername = obj:get_player_name()
+				if objpos.y > pos.y-1
+				and objpos.y < pos.y
+				and objplayername ~= nil
+				and objplayername ~= "" then
 					local innether = nether:inside_nether(obj:getpos())
-					if innether == true and (objmeta:get_string("teleportingfromnether") == "" or objmeta:get_string("teleportingfromnether") == nil) then
+					local objstring1 = objmeta:get_string("teleportingfromnether")
+					if innether
+					and (
+						objstring1 == "" 
+						or objstring1 == nil
+					) then
 						objmeta:set_string("teleportingfromnether", "true")
 						objmeta:set_string("teleportingtonether", "")
 						nether:teleport_player(innether, obj)
-					elseif innether == false and (objmeta:get_string("teleportingtonether") == "" or objmeta:get_string("teleportingtonether") == nil) then
+						return
+					end
+					local objstring2 = objmeta:get_string("teleportingtonether")
+					if not innether
+					and (
+						objstring2 == ""
+						or objstring2 == nil
+					) then
 						objmeta:set_string("teleportingtonether", "true")
 						objmeta:set_string("teleportingfromnether", "")
 						nether:teleport_player(innether, obj)
