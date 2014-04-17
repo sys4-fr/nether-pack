@@ -39,204 +39,6 @@ NETHER_HEAL_APPLE_FREQ = 10
 HADES_THRONE_STARTPOS = {x=0, y=1, z=0}
 -- Spawn pos for when the nether hasn't been loaded yet (i.e. no portal in the nether) (y is relative to the bottom of the nether)
 NETHER_SPAWNPOS = {x=0, y=5, z=0}
--- Throne of Hades
-HADES_THRONE = {
-	-- Lava Moat
-	{pos={x=-1,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=0}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=1}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=2}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=3}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=4}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=5}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=6}, block="default:lava_source"},
-	{pos={x=-1,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=0,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=1,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=2,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=3,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=4,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=5,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=7}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=6}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=5}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=4}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=3}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=2}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=1}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=0}, block="default:lava_source"},
-	{pos={x=6,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=5,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=4,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=3,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=2,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=1,y=-1,z=-1}, block="default:lava_source"},
-	{pos={x=0,y=-1,z=-1}, block="default:lava_source"},
-	-- Floor 1
-	{pos={x=0,y=0,z=0}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=1}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=2}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=3}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=4}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=1,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=2,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=4,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=5}, block="nether:netherrack"},
-	{pos={x=0,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=1,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=2,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=3,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=4,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=4}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=3}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=2}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=1}, block="nether:netherrack"},
-	{pos={x=5,y=0,z=0}, block="nether:netherrack"},
-	{pos={x=4,y=0,z=0}, block="nether:netherrack"},
-	{pos={x=3,y=0,z=0}, block="nether:netherrack"},
-	{pos={x=2,y=0,z=0}, block="nether:netherrack"},
-	{pos={x=1,y=0,z=0}, block="nether:netherrack"},
-	-- Floor 2
-	{pos={x=0,y=1,z=0}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=1}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=2}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=3}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=4}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=1,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=2,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=4,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=5}, block="nether:netherrack"},
-	{pos={x=0,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=1,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=2,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=3,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=4,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=4}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=3}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=2}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=1}, block="nether:netherrack"},
-	{pos={x=5,y=1,z=0}, block="nether:netherrack"},
-	{pos={x=4,y=1,z=0}, block="nether:netherrack"},
-	{pos={x=3,y=1,z=1}, block="nether:netherrack"},
-	{pos={x=2,y=1,z=1}, block="nether:netherrack"},
-	{pos={x=1,y=1,z=0}, block="nether:netherrack"},
-	{pos={x=1,y=1,z=1}, block="nether:netherrack"},
-	{pos={x=4,y=1,z=1}, block="nether:netherrack"},
-	-- Floor 3
-	{pos={x=0,y=2,z=0}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=1}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=2}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=3}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=4}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=1,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=2,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=4,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=5}, block="nether:netherrack"},
-	{pos={x=0,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=1,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=2,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=3,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=4,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=4}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=3}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=2}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=1}, block="nether:netherrack"},
-	{pos={x=5,y=2,z=0}, block="nether:netherrack"},
-	{pos={x=4,y=2,z=0}, block="nether:netherrack"},
-	{pos={x=3,y=2,z=2}, block="nether:netherrack"},
-	{pos={x=2,y=2,z=2}, block="nether:netherrack"},
-	{pos={x=1,y=2,z=0}, block="nether:netherrack"},
-	{pos={x=1,y=2,z=1}, block="nether:netherrack"},
-	{pos={x=4,y=2,z=1}, block="nether:netherrack"},
-	{pos={x=1,y=2,z=2}, block="nether:netherrack"},
-	{pos={x=4,y=2,z=2}, block="nether:netherrack"},
-	-- Floor 4
-	{pos={x=0,y=3,z=0}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=1}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=2}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=2,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=0,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=2,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=3,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=6}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=2}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=1}, block="nether:netherrack"},
-	{pos={x=5,y=3,z=0}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=0}, block="nether:netherrack"},
-	{pos={x=3,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=2,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=0}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=1}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=1}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=2}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=2}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=3}, block="nether:netherrack"},
-	{pos={x=1,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=4,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=2,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=2,y=3,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=3,z=4}, block="nether:netherrack"},
-	{pos={x=3,y=3,z=5}, block="nether:netherrack"},
-	-- Floor 5
-	{pos={x=2,y=4,z=4}, block="nether:netherrack"},
-	{pos={x=2,y=4,z=5}, block="nether:netherrack"},
-	{pos={x=3,y=4,z=4}, block="nether:netherrack"},
-	{pos={x=3,y=4,z=5}, block="nether:netherrack"},
-	{pos={x=2,y=4,z=6}, block="nether:netherrack"},
-	{pos={x=3,y=4,z=6}, block="nether:netherrack"},
-	-- Torches on floor 5
-	{pos={x=0,y=4,z=4}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=4}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=5}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=5}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=4}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=4}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=5}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=5}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=0}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=0}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=1}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=1}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=0}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=0}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=1}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=1}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=2}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=2}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=3}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=3}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=2}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=2}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=3}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=3}, block="nether:torch_bottom"},
-	{pos={x=4,y=4,z=6}, block="nether:torch_bottom"},
-	{pos={x=5,y=4,z=6}, block="nether:torch_bottom"},
-	{pos={x=0,y=4,z=6}, block="nether:torch_bottom"},
-	{pos={x=1,y=4,z=6}, block="nether:torch_bottom"},
-	-- Nether Portal
-	{pos={x=1,y=5,z=6}, portalblock=true},
-}
 -- Structure of the nether portal (all is relative to the nether portal creator block)
 NETHER_PORTAL = {
 	-- Floor 1
@@ -316,13 +118,13 @@ end
 -- Generated variables
 NETHER_BOTTOM = (NETHER_DEPTH - NETHER_HEIGHT)
 NETHER_ROOF_ABS = (NETHER_DEPTH - NETHER_RANDOM)
-HADES_THRONE_STARTPOS_ABS = {x=HADES_THRONE_STARTPOS.x, y=(NETHER_BOTTOM + HADES_THRONE_STARTPOS.y), z=HADES_THRONE_STARTPOS.z}
+--HADES_THRONE_STARTPOS_ABS = {x=HADES_THRONE_STARTPOS.x, y=(NETHER_BOTTOM + HADES_THRONE_STARTPOS.y), z=HADES_THRONE_STARTPOS.z}
 LAVA_Y = (NETHER_BOTTOM + LAVA_HEIGHT)
-HADES_THRONE_ABS = {}
-HADES_THRONE_ENDPOS_ABS = {}
-HADES_THRONE_GENERATED = minetest.get_worldpath() .. "/netherhadesthrone.txt"
+--HADES_THRONE_ABS = {}
+--HADES_THRONE_ENDPOS_ABS = {}
+--HADES_THRONE_GENERATED = minetest.get_worldpath() .. "/netherhadesthrone.txt"
 NETHER_SPAWNPOS_ABS = {x=NETHER_SPAWNPOS.x, y=(NETHER_BOTTOM + NETHER_SPAWNPOS.y), z=NETHER_SPAWNPOS.z}
-for i,v in ipairs(HADES_THRONE) do
+--[[for i,v in ipairs(HADES_THRONE) do
 	v.pos.x = v.pos.x + HADES_THRONE_STARTPOS_ABS.x
 	v.pos.y = v.pos.y + HADES_THRONE_STARTPOS_ABS.y
 	v.pos.z = v.pos.z + HADES_THRONE_STARTPOS_ABS.z
@@ -342,7 +144,7 @@ for i,v in ipairs(HADES_THRONE_ABS) do
 		htz = v.pos.z
 	end
 end
-HADES_THRONE_ENDPOS_ABS = {x=htx, y=hty, z=htz}
+HADES_THRONE_ENDPOS_ABS = {x=htx, y=hty, z=htz}]]
 local nether = {}
 
 -- == General Utility Functions ==
@@ -546,30 +348,6 @@ minetest.register_node("nether:torch", {
 	sounds = default.node_sound_defaults(),
 })
 
--- Nether torch (only shows the bottom torch. This is a hack)
-minetest.register_node("nether:torch_bottom", {
-	description = "Nether Torch Bottom Side (you hacker!)",
-	drawtype = "torchlike",
-	tiles = {"nether_torch_on_floor.png", "nether_torch_on_floor.png", "nether_torch_on_floor.png"},
-	inventory_image = "nether_torch_on_floor.png",
-	wield_image = "nether_torch_on_floor.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	sunlight_propagates = true,
-	walkable = false,
-	light_source = LIGHT_MAX - 1,
-	drop = "nether:torch",
-	selection_box = {
-		type = "wallmounted",
-		wall_top = {-0.1, -0.5, -0.1, 0.1, -0.5+0.6, 0.1},
-		wall_bottom = {-0.1, -0.5, -0.1, 0.1, -0.5+0.6, 0.1},
-		wall_side = {-0.1, -0.5, -0.1, 0.1, -0.5+0.6, 0.1},
-	},
-	groups = {choppy=2, dig_immediate=3},
-	legacy_wallmounted = true,
-	sounds = default.node_sound_defaults(),
-})
-
 -- Nether Pearl
 minetest.register_craftitem("nether:pearl", {
 	description = "Nether Pearl",
@@ -586,6 +364,14 @@ local c_glowstone = minetest.get_content_id("glow:stone") --https://github.com/Z
 local c_lava = minetest.get_content_id("default:lava_source")
 local c_nether_shroom = minetest.get_content_id("riesenpilz:nether_shroom")
 local c_nether_vine = minetest.get_content_id("nether:vine")
+
+local function return_nether_ore(glowstone)
+	if glowstone
+	and pr:next(0,GLOWSTONE_FREQ_ROOF) == 1 then
+		return c_glowstone
+	end
+	return c_netherrack
+end
 
 local info = true
 local trees_enabled = true
@@ -608,7 +394,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local data = vm:get_data()
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 
-	local pr = PseudoRandom(seed+33)
+	pr = PseudoRandom(seed+33)
 	local num = 1
 	local tab = {}
 
@@ -646,45 +432,47 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			local top = NETHER_DEPTH-pr:next(0,NETHER_RANDOM)+t
 
 			for y=minp.y, maxp.y, 1 do
-				local addpos = {x=x, y=y-1, z=z}
 				local p_addpos = area:index(x, y, z)
-				if y <= NETHER_BOTTOM then
-					if y <= bottom then
-						data[p_addpos] = c_netherrack
+				if data[p_addpos] ~= c_air then
+					local addpos = {x=x, y=y-1, z=z}
+					if y <= NETHER_BOTTOM then
+						if y <= bottom then
+							data[p_addpos] = return_nether_ore(1)
+						else
+							data[p_addpos] = c_lava
+						end
+					elseif r_tree == 1
+					and y == bottom then
+						tab[num] = addpos
+						num = num+1
+					elseif y <= bottom then
+						if pr:next(1,LAVA_FREQ) == 1 then
+							data[p_addpos] = c_lava
+						else
+							data[p_addpos] = return_nether_ore(0)
+						end
+					elseif r_shroom == 1
+					and r_tree ~= 1
+					and y == bottom+1 then
+						data[p_addpos] = c_nether_shroom
+					elseif (y == top and r_glowstone == 1) then
+						data[p_addpos] = c_glowstone
+					elseif y >= top then
+						data[p_addpos] = return_nether_ore(1)
+					elseif y <= top-1
+					and generate_vine
+					and y >= top-r_vine_length then
+						data[p_addpos] = c_nether_vine
 					else
-						data[p_addpos] = c_lava
+						data[p_addpos] = c_air
 					end
-				elseif r_tree == 1
-				and y == bottom then
-					tab[num] = addpos
-					num = num+1
-				elseif y <= bottom then
-					if pr:next(1,LAVA_FREQ) == 1 then
-						data[p_addpos] = c_lava
-					else
-						data[p_addpos] = c_netherrack
-					end
-				elseif r_shroom == 1
-				and r_tree ~= 1
-				and y == bottom+1 then
-					data[p_addpos] = c_nether_shroom
-				elseif (y == top
-				and r_glowstone == 1) then
-					data[p_addpos] = c_glowstone
-				elseif y >= top then
-					data[p_addpos] = c_netherrack
-				elseif y <= top-1
-				and generate_vine
-				and y >= top-r_vine_length then
-					data[p_addpos] = c_nether_vine
-				else
-					data[p_addpos] = c_air
 				end
 --				d_p_addpos = data[p_addpos]
 			end
 		end
 	end
 	vm:set_data(data)
+--	vm:set_lighting(12)
 	vm:calc_lighting()
 	vm:update_liquids()
 	vm:write_to_map()
@@ -724,7 +512,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		nether:touch(HADES_THRONE_GENERATED)
 	end]]
 	if info then
-		local geninfo = string.format("[nether] done in: %.2fs", os.clock() - t1)
+		local geninfo = string.format("[nether] done after: %.2fs", os.clock() - t1)
 		print(geninfo)
 		minetest.chat_send_all(geninfo)
 	end
