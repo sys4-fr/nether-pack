@@ -98,6 +98,21 @@ NETHER_PORTAL = {
 
 --== END OF EDITABLE OPTIONS ==--
 
+local path = minetest.get_modpath("nether")
+dofile(path.."/weird_mapgen_noise.lua")
+
+local function dif(z1, z2)
+	if z1 < 0
+	and z2 < 0 then
+		z1,z2 = -z1,-z2
+	end
+	return math.abs(z1-z2)
+end
+
+local function pymg(x1, x2, z1, z2)
+	return math.max(dif(x1, x2), dif(z1, z2))
+end
+
 local function r_area(manip, width, height, pos)
 	local emerged_pos1, emerged_pos2 = manip:read_from_map(
 		{x=pos.x-width, y=pos.y, z=pos.z-width},
@@ -278,7 +293,7 @@ minetest.register_node("nether:blood_stem", {
 	sounds = default.node_sound_wood_defaults(),
 })
 
--- Nether leaves
+--[[ Nether leaves
 minetest.register_node("nether:leaves", {
 	description = "Nether Leaves",
 	drawtype = "allfaces_optional",
@@ -287,7 +302,7 @@ minetest.register_node("nether:leaves", {
 	paramtype = "light",
 	groups = {snappy=3, leafdecay=2},
 	sounds = default.node_sound_leaves_defaults(),
-})
+})]]
 
 -- Nether apple
 minetest.register_node("nether:apple", {
@@ -360,6 +375,7 @@ minetest.register_craftitem("nether:pearl", {
 
 local c_air = minetest.get_content_id("air")
 local c_netherrack = minetest.get_content_id("nether:netherrack")
+local c_netherrack_brick = minetest.get_content_id("nether:netherrack_brick")
 local c_glowstone = minetest.get_content_id("glow:stone") --https://github.com/Zeg9/minetest-glow
 local c_lava = minetest.get_content_id("default:lava_source")
 local c_nether_shroom = minetest.get_content_id("riesenpilz:nether_shroom")
@@ -395,15 +411,16 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 
 	pr = PseudoRandom(seed+33)
-	local num = 1
-	local tab = {}
+	local tab,num = {},1
+	local num2 = 1
 
 	local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
 	local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
 	local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
+	local tab2 = nether_weird_noise(minp, pymg, 20, 8)
 
-	for x=minp.x, maxp.x, 1 do
-		for z=minp.z, maxp.z, 1 do
+	for z=minp.z, maxp.z do
+		for x=minp.x, maxp.x do
 
 			local r_tree = pr:next(1,NETHER_TREE_FREQ)
 			local r_shroom = pr:next(1,NETHER_SHROOM_FREQ)
@@ -431,10 +448,18 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			local bottom = NETHER_BOTTOM+h
 			local top = NETHER_DEPTH-pr:next(0,NETHER_RANDOM)+t
 
+			local py_h = tab2[num2].y
+			num2 = num2+1
+
 			for y=minp.y, maxp.y, 1 do
 				local p_addpos = area:index(x, y, z)
-				if data[p_addpos] ~= c_air then
-					local addpos = {x=x, y=y-1, z=z}
+				--if py_h >= maxp.y-4 then
+				if y == py_h then
+					data[p_addpos] = c_netherrack_brick
+					--[[else
+						data[p_addpos] = c_air
+					end]]
+				elseif data[p_addpos] ~= c_air then
 					if y <= NETHER_BOTTOM then
 						if y <= bottom then
 							data[p_addpos] = return_nether_ore(1)
@@ -443,7 +468,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 						end
 					elseif r_tree == 1
 					and y == bottom then
-						tab[num] = addpos
+						tab[num] = {x=x, y=y-1, z=z}
 						num = num+1
 					elseif y <= bottom then
 						if pr:next(1,LAVA_FREQ) == 1 then
