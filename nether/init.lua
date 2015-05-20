@@ -208,6 +208,7 @@ HADES_THRONE_ENDPOS_ABS = {x=htx, y=hty, z=htz}]]
 local c
 local function define_contents()
 	c = {
+		ignore = minetest.get_content_id("ignore"),
 		air = minetest.get_content_id("air"),
 		lava = minetest.get_content_id("default:lava_source"),
 		gravel = minetest.get_content_id("default:gravel"),
@@ -637,6 +638,10 @@ function nether.grow_netherstructure(pos, generated)
 end
 
 
+local function soft_node(id)
+	return id == c.air or id == c.ignore
+end
+
 local function update_minmax(min, max, p)
 	min.x = math.min(min.x, p.x)
 	max.x = math.max(max.x, p.x)
@@ -809,7 +814,7 @@ function nether.grow_tree(pos, generated)
 
 	for _,p in pairs(leaf_ps) do
 		p = area:indexp(p)
-		if nodes[p] == c.air then
+		if soft_node(nodes[p]) then
 			nodes[p] = c.nether_leaves
 			param2s[p] = math.random(0,44)
 		end
@@ -817,7 +822,7 @@ function nether.grow_tree(pos, generated)
 
 	for _,p in pairs(fruit_ps) do
 		p = area:indexp(p)
-		if nodes[p] == c.air then
+		if soft_node(nodes[p]) then
 			nodes[p] = c.nether_apple
 			--param2s[p] = math.random(0,44)
 		end
