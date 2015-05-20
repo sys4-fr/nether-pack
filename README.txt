@@ -7,4 +7,5 @@ http://i.imgur.com/pMZYqt9.png
 
 
 TODO:
-— finish nether forest
+— care about nether torches
+— find out why the nether forests top is sometimes flat

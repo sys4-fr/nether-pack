@@ -125,6 +125,36 @@ local function table_contains(t, v)
 	return false
 end
 
+-- Weierstrass function stuff from https://github.com/slemonide/gen
+local SIZE = 1000
+local ssize = math.ceil(math.abs(SIZE))
+local function do_ws_func(depth, a, x)
+	local n = x/(16*SIZE)
+	local y = 0
+	for k=1,depth do
+		y = y + SIZE*(math.sin(math.pi * k^a * n)/(math.pi * k^a))
+	end
+	return y
+end
+
+local chunksize = minetest.setting_get("chunksize") or 5
+local ws_lists = {}
+local function get_ws_list(a,x)
+        ws_lists[a] = ws_lists[a] or {}
+        local v = ws_lists[a][x]
+        if v then
+                return v
+        end
+        v = {}
+        for x=x,x + (chunksize*16 - 1) do
+		local y = do_ws_func(ssize, a, x)
+                v[x] = y
+        end
+        ws_lists[a][x] = v
+        return v
+end
+
+
 local function dif(z1, z2)
 	if z1 < 0
 	and z2 < 0 then
@@ -367,10 +397,12 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local forest_possible = maxp.y > f_h_min and minp.y < f_h_max
 
 	--local pmap_f_bottom = minetest.get_perlin_map(perlins.forest_bottom, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
-	local perlin_f_bottom, pmap_f_top
+	local perlin_f_bottom, pmap_f_top, strassx, strassz
 	if forest_possible then
 		perlin_f_bottom = minetest.get_perlin(11, 3, 0.8, tmp2)
 		pmap_f_top = minetest.get_perlin_map(perlins.forest_top, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
+		strassx = get_ws_list(2, minp.x)
+		strassz = get_ws_list(2, minp.z)
 	end
 
 	local num2, tab2
@@ -449,8 +481,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 					if not f_perlins[pstr] then
 						f_perlins[pstr] = math.floor(f_h_min+(math.abs(perlin_f_bottom:get2d({x=p.x, y=p.z})+1))*f_yscale_bottom+0.5)
 					end
+					f_top = math.floor(f_h_max - (pmap_f_top[count]+1)*f_yscale_top + 0.5)
 					f_bottom = f_perlins[pstr]+math.random(0,f_bottom_scale-1)
-					f_top = math.floor(f_h_max-(pmap_f_top[count]+1)*f_yscale_top+0.5)
 					is_forest = f_bottom < f_top
 					f_h_dirt = f_bottom-pr:next(0,1)
 				end
@@ -508,6 +540,18 @@ minetest.register_on_generated(function(minp, maxp, seed)
 								{c.nether_tree, c.nether_tree_corner, c.nether_leaves, c.nether_fruit},
 								d_p_addp
 							) then
+								data[p_addpos] = c.air
+							end
+						elseif is_forest
+						and y == f_top then
+							local sel = math.floor(strassx[x]+strassz[z]+0.5)%10
+							if sel <= 5 then
+								data[p_addpos] = return_nether_ore(d_p_addp, true)
+							elseif sel == 6 then
+								data[p_addpos] = c.netherrack_black
+							elseif sel == 7 then
+								data[p_addpos] = c.glowstone
+							else
 								data[p_addpos] = c.air
 							end
 
