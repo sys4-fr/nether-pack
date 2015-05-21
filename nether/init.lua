@@ -481,8 +481,13 @@ minetest.register_on_generated(function(minp, maxp, seed)
 					if not f_perlins[pstr] then
 						f_perlins[pstr] = math.floor(f_h_min+(math.abs(perlin_f_bottom:get2d({x=p.x, y=p.z})+1))*f_yscale_bottom+0.5)
 					end
-					f_top = math.floor(f_h_max - (pmap_f_top[count]+1)*f_yscale_top + 0.5)
-					f_bottom = f_perlins[pstr]+math.random(0,f_bottom_scale-1)
+					local top_noise = pmap_f_top[count]+1
+					if top_noise < 0 then
+						top_noise = -top_noise/10
+						--nether:inform("ERROR: (perlin noise) "..pmap_f_top[count].." is not inside [-1; 1]", 1)
+					end
+					f_top = math.floor(f_h_max - top_noise*f_yscale_top + 0.5)
+					f_bottom = f_perlins[pstr]+pr:next(0,f_bottom_scale-1)
 					is_forest = f_bottom < f_top
 					f_h_dirt = f_bottom-pr:next(0,1)
 				end
