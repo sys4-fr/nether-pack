@@ -416,7 +416,7 @@ minetest.register_node("nether:vine", {
 				minetest.node_dig(p, nn, digger)
 			end
 		end
-	end 
+	end
 })
 
 
