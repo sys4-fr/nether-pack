@@ -543,7 +543,9 @@ minetest.register_node("nether:dirt", {
 
 minetest.register_node("nether:dirt_top", {
 	description = "Nether Dirt Top",
-	tiles = {"nether_dirt_top.png", "nether_dirt.png", "nether_dirt.png^nether_dirt_top_side.png"},
+	tiles = {"nether_dirt_top.png", "nether_dirt.png",
+		{name="nether_dirt.png^nether_dirt_top_side.png", tileable_vertical = false}
+	},
 	groups = {crumbly=3,soil=1,nether_dirt=1},
 	drop = "nether:dirt",
 	sounds = default.node_sound_dirt_defaults({
@@ -553,7 +555,9 @@ minetest.register_node("nether:dirt_top", {
 
 minetest.register_node("nether:dirt_bottom", {
 	description = "Netherrack Dirt Transition",
-	tiles = {"nether_dirt.png", "nether_netherrack.png", "nether_netherrack.png^nether_dirt_transition.png"},
+	tiles = {"nether_dirt.png", "nether_netherrack.png",
+		{name="nether_netherrack.png^nether_dirt_transition.png", tileable_vertical = false}
+	},
 	groups = {nether=2},
 	drop = "nether:netherrack",
 	sounds = default.node_sound_dirt_defaults({
