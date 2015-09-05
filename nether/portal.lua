@@ -224,16 +224,11 @@ if nether_prisons then
 		end
 	end
 
-	-- fix wrong player positions
-	local timer = 0	--doesn't work if the server lags
-	minetest.register_globalstep(function(dtime)
-		timer = timer + dtime;
-		if timer >= 2 then
-			--minetest.after(1, update_players)
-			update_players()
-			timer = 0
-		end
-	end)
+	local function tick()
+		update_players()
+		minetest.after(2, tick)
+	end
+	tick()
 
 	-- set background when player joins
 	minetest.register_on_joinplayer(function(player)
