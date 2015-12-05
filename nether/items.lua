@@ -19,27 +19,33 @@ local function add_stair_and_slab(name)
 	)
 end
 
+--[[
+local function add_fence(name)
+	local def = minetest.registered_nodes[name]
+	local fencedef = {}
+	for _,i in pairs({"walkable", "sunlike_propagates"}) do
+		if def[i] ~= nil then
+			fencedef[i] = def[i]
+		end
+	end
+end
+--]]
+
 local function digging_allowed(player, v)
 	if not player then
 		return false
 	end
 	local tool = minetest.registered_tools[player:get_wielded_item():get_name()]
-	if not tool then
+	if not tool
+	or not tool.tool_capabilities then
 		return false
 	end
-	local capabilities = tool.tool_capabilities
-	if not capabilities then
-		return false
-	end
-	local groups = capabilities.groupcaps
+	local groups = tool.tool_capabilities.groupcaps
 	if not groups then
 		return false
 	end
-	local nether = groups.nether
-	if not nether then
-		return false
-	end
-	if nether.times[v] then
+	if groups.nether
+	and groups.nether.times[v] then
 		return true
 	end
 	return false
@@ -990,4 +996,3 @@ minetest.register_tool("nether:sword_white", {
 		damage_groups = {fleshy=11},
 	},
 })
-
