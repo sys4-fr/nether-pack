@@ -7,5 +7,5 @@ http://i.imgur.com/pMZYqt9.png
 
 
 TODO:
-— care about nether torches
+— add nether fences
 — find a way to get the perlin noise inside [-1; 1] or use another noise
