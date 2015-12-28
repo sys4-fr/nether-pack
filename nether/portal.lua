@@ -522,11 +522,22 @@ local function netherport(pos)
 	return true
 end
 
+-- cache known portals
+local known_portals_d = {}
+local known_portals_u = {}
+local function get_portal(t, z,x)
+	return t[z] and t[z][x]
+end
+local function set_portal(t, z,x, y)
+	t[z] = t[z] or {}
+	t[z][x] = y
+end
+
 function nether_port(player, pos)
 	if not player
 	or not pos
 	or not pos.x then
-		print("[nether] something failed.")
+		minetest.log("error", "[nether] nether_port: something failed.")
 		return
 	end
 	if not netherport(pos) then
@@ -534,11 +545,13 @@ function nether_port(player, pos)
 	end
 	minetest.sound_play("nether_teleporter", {pos=pos})
 	if pos.y < nether.start then
+		set_portal(known_portals_d, pos.z,pos.x, pos.y)
 		player_from_nether(player)
-		pos.y = 100
+		pos.y = get_portal(known_portals_u, pos.z,pos.x) or 100
 		player:moveto(pos)
 	else
-		pos.y = portal_target+math.random(4)
+		set_portal(known_portals_u, pos.z,pos.x, pos.y)
+		pos.y = get_portal(known_portals_d, pos.z,pos.x) or portal_target+math.random(4)
 		player:moveto(pos)
 		player_to_nether(player, true)
 	end
