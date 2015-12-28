@@ -4,19 +4,23 @@ local nether_sound = default.node_sound_stone_defaults({
 	footstep = {name="nether_footstep", gain=0.4}
 })
 
-local function add_stair_and_slab(name)
+local add_fence = minetest.register_fence
+local function add_more_nodes(name)
 	local nd = "nether:"..name
 	if not string.find(name, "nether") then
 		name = "nether_"..name
 	end
 	local data = minetest.registered_nodes[nd]
 	stairs.register_stair_and_slab(name, nd,
-			data.groups,
-			data.tiles,
-			data.description.." Stair",
-			data.description.." Slab",
-			data.sounds
+		data.groups,
+		data.tiles,
+		data.description.." Stair",
+		data.description.." Slab",
+		data.sounds
 	)
+	if add_fence then
+		add_fence({fence_of = nd})
+	end
 end
 
 --[[
@@ -61,7 +65,7 @@ minetest.register_node("nether:netherrack", {
 		return digging_allowed(player, 2)
 	end,
 })
-add_stair_and_slab("netherrack")
+add_more_nodes("netherrack")
 
 minetest.register_node("nether:netherrack_tiled", {
 	description = "Tiled Netherrack",
@@ -72,7 +76,7 @@ minetest.register_node("nether:netherrack_tiled", {
 		return digging_allowed(player, 2)
 	end,
 })
-add_stair_and_slab("netherrack_tiled")
+add_more_nodes("netherrack_tiled")
 
 minetest.register_node("nether:netherrack_soil", {
 	description = "Dirty Netherrack",
@@ -93,7 +97,7 @@ minetest.register_node("nether:netherrack_black", {
 		return digging_allowed(player, 2)
 	end,
 })
-add_stair_and_slab("netherrack_black")
+add_more_nodes("netherrack_black")
 
 minetest.register_node("nether:netherrack_blue", {
 	description = "Blue Netherrack",
@@ -104,7 +108,7 @@ minetest.register_node("nether:netherrack_blue", {
 		return digging_allowed(player, 1)
 	end,
 })
-add_stair_and_slab("netherrack_blue")
+add_more_nodes("netherrack_blue")
 
 -- Netherbrick
 minetest.register_node("nether:netherrack_brick", {
@@ -116,7 +120,7 @@ minetest.register_node("nether:netherrack_brick", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("netherrack_brick")
+add_more_nodes("netherrack_brick")
 
 minetest.register_node("nether:netherrack_brick_blue", {
 	description = "Blue Netherrack Brick",
@@ -127,7 +131,7 @@ minetest.register_node("nether:netherrack_brick_blue", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("netherrack_brick_blue")
+add_more_nodes("netherrack_brick_blue")
 
 minetest.register_node("nether:netherrack_brick_black", {
 	description = "Black Netherrack Brick",
@@ -138,7 +142,7 @@ minetest.register_node("nether:netherrack_brick_black", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("netherrack_brick_black")
+add_more_nodes("netherrack_brick_black")
 
 minetest.register_node("nether:white", {
 	description = "Siwtonic block",
@@ -149,7 +153,7 @@ minetest.register_node("nether:white", {
 		return digging_allowed(player, 1)
 	end,
 })
-add_stair_and_slab("white")
+add_more_nodes("white")
 
 
 -- Nether blood
@@ -175,7 +179,7 @@ minetest.register_node("nether:blood", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood")
+add_more_nodes("blood")
 
 minetest.register_node("nether:blood_cooked", {
 	description = "Cooked Nether Blood",
@@ -187,7 +191,7 @@ minetest.register_node("nether:blood_cooked", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("blood_cooked")
+add_more_nodes("blood_cooked")
 
 minetest.register_node("nether:blood_empty", {
 	description = "Nether Blood Extracted",
@@ -195,7 +199,7 @@ minetest.register_node("nether:blood_empty", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood_empty")
+add_more_nodes("blood_empty")
 
 
 minetest.register_node("nether:blood_top", {
@@ -204,7 +208,7 @@ minetest.register_node("nether:blood_top", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood_top")
+add_more_nodes("blood_top")
 
 minetest.register_node("nether:blood_top_cooked", {
 	description = "Cooked Nether Blood Head",
@@ -216,7 +220,7 @@ minetest.register_node("nether:blood_top_cooked", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("blood_top_cooked")
+add_more_nodes("blood_top_cooked")
 
 minetest.register_node("nether:blood_top_empty", {
 	description = "Nether Blood Head Extracted",
@@ -224,7 +228,7 @@ minetest.register_node("nether:blood_top_empty", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood_top_empty")
+add_more_nodes("blood_top_empty")
 
 
 minetest.register_node("nether:blood_stem", {
@@ -233,7 +237,7 @@ minetest.register_node("nether:blood_stem", {
 	groups = {snappy=2, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood_stem")
+add_more_nodes("blood_stem")
 
 minetest.register_node("nether:blood_stem_cooked", {
 	description = "Cooked Nether Blood Stem",
@@ -245,7 +249,7 @@ minetest.register_node("nether:blood_stem_cooked", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("blood_stem_cooked")
+add_more_nodes("blood_stem_cooked")
 
 minetest.register_node("nether:blood_stem_empty", {
 	description = "Nether Blood Stem Extracted",
@@ -253,7 +257,7 @@ minetest.register_node("nether:blood_stem_empty", {
 	groups = {tree=1, choppy=2, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("blood_stem_empty")
+add_more_nodes("blood_stem_empty")
 
 
 minetest.register_node("nether:wood", {
@@ -262,7 +266,7 @@ minetest.register_node("nether:wood", {
 	groups = {choppy=2, oddly_breakable_by_hand=2},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("wood")
+add_more_nodes("wood")
 
 minetest.register_node("nether:wood_cooked", {
 	description = "Cooked Nether Blood Wood",
@@ -274,7 +278,7 @@ minetest.register_node("nether:wood_cooked", {
 		return digging_allowed(player, 3)
 	end,
 })
-add_stair_and_slab("wood_cooked")
+add_more_nodes("wood_cooked")
 
 minetest.register_node("nether:wood_empty", {
 	description = "Nether Wood",
@@ -282,7 +286,7 @@ minetest.register_node("nether:wood_empty", {
 	groups = {choppy=2, oddly_breakable_by_hand=2, wood=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("wood_empty")
+add_more_nodes("wood_empty")
 
 minetest.register_node("nether:extractor", {
 	description = "Nether Blood Extractor",
@@ -302,7 +306,7 @@ minetest.register_node("nether:fruit_leaves", {
 	sounds = default.node_sound_defaults(),
 	furnace_burntime = 18,
 })
-add_stair_and_slab("fruit_leaves")
+add_more_nodes("fruit_leaves")
 
 local function room_for_items(inv)
 	local free_slots = 0
@@ -512,7 +516,7 @@ minetest.register_node("nether:forest_wood", {
 	groups = {choppy=2,oddly_breakable_by_hand=2,wood=1},
 	sounds = default.node_sound_wood_defaults(),
 })
-add_stair_and_slab("forest_wood")
+add_more_nodes("forest_wood")
 
 minetest.register_node("nether:leaves", {
 	description = "Nether Leaves",
