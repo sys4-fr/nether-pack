@@ -95,22 +95,21 @@ minetest.register_chatcommand("to_hell", {
 	description = "Send someone to hell",
 	func = function(name, pname)
 		if not minetest.check_player_privs(name, {nether=true}) then
-			local self_player = minetest.get_player_by_name(name)
+			local self_player,msg = minetest.get_player_by_name(name)
 			if self_player then
-				minetest.chat_send_player(name, "You can't send anyone to hell, go to hell instead")
+				msg = "You can't send anyone to hell, go to hell instead"
 				player_to_nether(self_player)
 			else
-				minetest.chat_send_player(name, "Something went wrong.")
+				msg = "Something went wrong."
 			end
-			return false
+			return false, msg
 		end
 		if not player_exists(pname) then
 			pname = name
 		end
 		local player = minetest.get_player_by_name(pname)
 		if not player then
-			minetest.chat_send_player(name, "Something went wrong.")
-			return false
+			return false, "Something went wrong."
 		end
 		minetest.chat_send_player(pname, "Go to hell !!!")
 		player_to_nether(player)
