@@ -222,6 +222,7 @@ minetest.register_abm({
 	nodenames = {"nether:portal"},
 	interval = 1,
 	chance = 2,
+	catch_up = false,
 	action = function(pos, node)
 		if not abm_allowed then
 			return
@@ -535,10 +536,13 @@ function nether_port(player, pos)
 	minetest.sound_play("nether_teleporter", {pos=pos})
 	if pos.y < nether.start then
 		player_from_nether(player)
-		player:moveto({x=pos.x, y=100, z=pos.z})
+		pos.y = 100
+		player:moveto(pos)
 	else
-		player:moveto({x=pos.x, y=portal_target+math.random(4), z=pos.z})
+		pos.y = portal_target+math.random(4)
+		player:moveto(pos)
 		player_to_nether(player, true)
 	end
+	minetest.sound_play("nether_teleporter", {pos=pos})
 	return true
 end
