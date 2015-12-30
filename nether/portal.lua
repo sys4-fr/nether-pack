@@ -91,18 +91,11 @@ end
 
 -- Chatcommands (edited) written by sss
 minetest.register_chatcommand("to_hell", {
-	params = "",
+	params = "[<player_name>]",
 	description = "Send someone to hell",
 	func = function(name, pname)
 		if not minetest.check_player_privs(name, {nether=true}) then
-			local self_player,msg = minetest.get_player_by_name(name)
-			if self_player then
-				msg = "You can't send anyone to hell, go to hell instead"
-				player_to_nether(self_player)
-			else
-				msg = "Something went wrong."
-			end
-			return false, msg
+			return false, "You need the nether priv to execute this chatcommand."
 		end
 		if not player_exists(pname) then
 			pname = name
@@ -113,37 +106,29 @@ minetest.register_chatcommand("to_hell", {
 		end
 		minetest.chat_send_player(pname, "Go to hell !!!")
 		player_to_nether(player)
-		return true
+		return true, pname.." is now in the nether."
 	end
 })
 
 minetest.register_chatcommand("from_hell", {
-	params = "",
+	params = "[<player_name>]",
 	description = "Extract from hell",
 	func = function(name, pname)
 		if not minetest.check_player_privs(name, {nether=true}) then
-			local self_player = minetest.get_player_by_name(name)
-			if self_player then
-				minetest.chat_send_player(name, "You can't send anyone to hell, go to hell instead")
-				player_to_nether(self_player)
-			else
-				minetest.chat_send_player(name, "Something went wrong.")
-			end
-			return false
+			return false, "You need the nether priv to execute this chatcommand."
 		end
 		if not player_exists(pname) then
 			pname = name
 		end
 		local player = minetest.get_player_by_name(pname)
 		if not player then
-			minetest.chat_send_player(name, "Something went wrong.")
-			return false
+			return false, "Something went wrong."
 		end
 		minetest.chat_send_player(pname, "You are free now")
 		player_from_nether(player)
 		local pos = player:getpos()
 		player:moveto({x=pos.x, y=100, z=pos.z})
-		return true
+		return true, pname.." is now out of the nether."
 	end
 })
 
