@@ -1,4 +1,7 @@
 --code copied from Pilzadam's nether mod and edited
+
+-- kills the player if he uses PilzAdam portal
+local obsidian_portal_kills = true
 local portal_target = nether.buildings+1
 local damage_enabled = minetest.setting_getbool("enable_damage")
 
@@ -58,7 +61,9 @@ local function player_to_nether(player, safe)
 	save_nether_players()
 	if not safe then
 		minetest.chat_send_player(pname, "For any reason you arrived here. Type /nether_help to find out things like craft recipes.")
-		player:set_hp(0)
+		if obsidian_portal_kills then
+			player:set_hp(0)
+		end
 	end
 	update_background(player, true)
 end
