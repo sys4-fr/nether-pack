@@ -24,15 +24,15 @@ end
 
 local function get_node(pos)
 	local name = minetest.get_node(pos).name
-	if name == "ignore" then
-		minetest.get_voxel_manip():read_from_map(pos, pos)
-		name = minetest.get_node_or_nil(pos)
-		if not name then
-			return
-		end
-		name = name.name
+	if name ~= "ignore" then
+		return name
 	end
-	return name
+	minetest.get_voxel_manip():read_from_map(pos, pos)
+	name = minetest.get_node_or_nil(pos)
+	if not name then
+		return
+	end
+	return name.name
 end
 
 local softs = {}
@@ -63,7 +63,6 @@ local function teleport_player(pos, player)
 	and nd3 then
 		pos.y = pos.y-1.4
 		player:moveto(pos)
-		pos.y = pos.y-0.6
 		return true
 	end
 	return false
@@ -91,8 +90,8 @@ minetest.register_on_shutdown(function()
 end)--]]
 
 minetest.register_entity("nether:pearl_entity", {
-	timer = 0,
 	collisionbox = {0,0,0,0,0,0}, --not pointable
+	visual_size = {x=0.1, y=0.1},
 	physical = false, -- Collides with things
 	textures = {"nether_pearl.png"},
 	on_activate = function(self, staticdata)
@@ -113,6 +112,7 @@ minetest.register_entity("nether:pearl_entity", {
 			player = self.player,
 		})
 	end,
+	timer = 0,
 	on_step = function(self, dtime)
 		self.timer = self.timer+dtime
 
@@ -174,7 +174,7 @@ minetest.register_entity("nether:pearl_entity", {
 			minetest.sound_play("nether_pearl", {pos=p, max_hear_distance=10})
 		end, p)
 		p.y = p.y+1
-		if teleport_player(p, player) then
+		if teleport_player(vector.new(p), player) then
 			return
 		end
 		p.y = p.y-2
