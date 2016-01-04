@@ -104,7 +104,11 @@ local function player_to_nether(player, safe)
 	players_in_nether[#players_in_nether+1] = pname
 	save_nether_players()
 	if not safe then
-		obsidian_teleport(player, pname)
+		minetest.chat_send_player(pname, "For any reason you arrived here. Type /nether_help to find out things like craft recipes.")
+		player:set_hp(0)
+		if not nether_prisons then
+			player:moveto(get_player_died_target(player))
+		end
 	end
 	update_background(player, true)
 end
@@ -576,18 +580,18 @@ end
 -- detects if it's a portal
 local function netherport(pos)
 	local x, y, z = pos.x, pos.y, pos.z
-	for _,i in ipairs({-1, 3}) do
+	for _,i in pairs({-1, 3}) do
 		if minetest.get_node({x=x, y=y+i, z=z}).name ~= "nether:white" then
 			return
 		end
 	end
-	for _,sn in ipairs(vector.square(1)) do
+	for _,sn in pairs(vector.square(1)) do
 		if minetest.get_node({x=x+sn[1], y=y-1, z=z+sn[2]}).name ~= "nether:netherrack"
 		or minetest.get_node({x=x+sn[1], y=y+3, z=z+sn[2]}).name ~= "nether:blood_cooked" then
 			return
 		end
 	end
-	for _,sn in ipairs(vector.square(2)) do
+	for _,sn in pairs(vector.square(2)) do
 		if minetest.get_node({x=x+sn[1], y=y-1, z=z+sn[2]}).name ~= "nether:netherrack_black"
 		or minetest.get_node({x=x+sn[1], y=y+3, z=z+sn[2]}).name ~= "nether:wood_empty" then
 			return
@@ -641,14 +645,37 @@ function nether_port(player, pos)
 		return
 	end
 	minetest.sound_play("nether_teleporter", {pos=pos})
+	local meta = minetest.get_meta({x=pos.x, y=pos.y-1, z=pos.z})
 	if pos.y < nether.start then
 		set_portal(known_portals_d, pos.z,pos.x, pos.y)
 		player_from_nether(player)
-		pos.y = get_portal(known_portals_u, pos.z,pos.x) or 100
+
+		local my = tonumber(meta:get_string("y"))
+		local y = get_portal(known_portals_u, pos.z,pos.x)
+		if y then
+			if y ~= my then
+				meta:set_string("y", y)
+			end
+		else
+			y = my or 100
+		end
+		pos.y = y
+
 		player:moveto(pos)
 	else
 		set_portal(known_portals_u, pos.z,pos.x, pos.y)
-		pos.y = get_portal(known_portals_d, pos.z,pos.x) or portal_target+math.random(4)
+
+		local my = tonumber(meta:get_string("y"))
+		local y = get_portal(known_portals_d, pos.z,pos.x)
+		if y then
+			if y ~= my then
+				meta:set_string("y", y)
+			end
+		else
+			y = my or portal_target+math.random(4)
+		end
+		pos.y = y
+
 		player:moveto(pos)
 		player_to_nether(player, true)
 	end
