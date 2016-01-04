@@ -634,6 +634,7 @@ local function set_portal(t, z,x, y)
 	t[z][x] = y
 end
 
+-- used when a player eats that fruit in a portal
 function nether_port(player, pos)
 	if not player
 	or not pos
