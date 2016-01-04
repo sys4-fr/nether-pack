@@ -56,16 +56,16 @@ end
 
 -- teleports the player there if there's free space
 local function teleport_player(pos, player)
-	local nd2 = is_soft(pos)
-	pos.y = pos.y+1
-	local nd3 = is_soft(pos)
-	if nd2
-	and nd3 then
-		pos.y = pos.y-1.4
-		player:moveto(pos)
-		return true
+	if not is_soft(pos) then
+		return false
 	end
-	return false
+	if not is_soft({x=pos.x, y=pos.y+1, z=pos.z})
+	and not is_soft({x=pos.x, y=pos.y-1, z=pos.z}) then
+		return false
+	end
+	pos.y = pos.y+0.05
+	player:moveto(pos)
+	return true
 end
 
 --[[
