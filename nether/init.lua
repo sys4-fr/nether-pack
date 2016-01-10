@@ -741,50 +741,53 @@ function nether.grow_tree(pos, generated)
 	local trunks = {}
 	local trunk_corners = {}
 	local h_stem = math.random(h_stem_min, h_stem_max)
-	local stems = {{x=pos.x, y=pos.y+h_stem, z=pos.z}}
-	local fi
-	while not fi do
-		for n,p in pairs(stems) do
-			local used_dirs = {}
-			for _,dir in pairs(dirs) do
-				if math.random(1,2) == 1 then
-					table.insert(used_dirs, dir)
-				end
+	local todo,n = {{x=pos.x, y=pos.y+h_stem, z=pos.z}},1
+	while n do
+		local p = todo[n]
+		todo[n] = nil
+		n = next(todo)
+
+		local used_dirs,u = {},1
+		for _,dir in pairs(dirs) do
+			if math.random(1,2) == 1 then
+				used_dirs[u] = dir
+				u = u+1
 			end
-			if not used_dirs[1] then
-				local dir1 = math.random(4)
-				local dir2 = math.random(3)
-				if dir1 <= dir2 then
-					dir2 = dir2+1
-				end
-				used_dirs[1] = dirs[dir1]
-				used_dirs[2] = dirs[dir2]
-			end
-			for _,dir in pairs(used_dirs) do
-				local p = vector.new(p)
-				local r = math.random(r_arm_min, r_arm_max)
-				for j = 1,r do
-					local x = p.x+j*dir[1]
-					local z = p.z+j*dir[2]
-					trunks[x.." "..p.y.." "..z] = dir[3]
-				end
-				r = r+1
-				p.x = p.x+r*dir[1]
-				p.z = p.z+r*dir[2]
-				trunk_corners[p.x.." "..p.y.." "..p.z] = dir[4] or dir[3]
-				local h = math.random(h_arm_min, h_arm_max)
-				for i = 1,h do
-					trunks[p.x.." "..p.y+i.." "..p.z] = true
-				end
-				p.y = p.y+h
-				table.insert(stems, p)
-			end
-			if p.y > pos.y+h_trunk_max then
-				fi = true
-				break
-			end
-			stems[n] = nil
 		end
+		if not used_dirs[1] then
+			local dir1 = math.random(4)
+			local dir2 = math.random(3)
+			if dir1 <= dir2 then
+				dir2 = dir2+1
+			end
+			used_dirs[1] = dirs[dir1]
+			used_dirs[2] = dirs[dir2]
+		end
+		for _,dir in pairs(used_dirs) do
+			local p = vector.new(p)
+			local r = math.random(r_arm_min, r_arm_max)
+			for j = 1,r do
+				local x = p.x+j*dir[1]
+				local z = p.z+j*dir[2]
+				trunks[x.." "..p.y.." "..z] = dir[3]
+			end
+			r = r+1
+			p.x = p.x+r*dir[1]
+			p.z = p.z+r*dir[2]
+			trunk_corners[p.x.." "..p.y.." "..p.z] = dir[4] or dir[3]
+			local h = math.random(h_arm_min, h_arm_max)
+			for i = 1,h do
+				trunks[p.x.." "..p.y+i.." "..p.z] = true
+			end
+			p.y = p.y+h
+			--n = #todo+1 -- causes small trees
+			todo[#todo+1] = p
+		end
+		if p.y > pos.y+h_trunk_max then
+			break
+		end
+
+		n = n or next(todo)
 	end
 	local leaves = {}
 	local fruits = {}
