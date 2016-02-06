@@ -840,6 +840,9 @@ function nether.grow_tree(pos, generated)
 		end
 	end
 
+	--ps = nil
+	--collectgarbage()
+
 	for i = -1,h_stem+1 do
 		trunk_ps[#trunk_ps+1] = {pos.z, pos.y+i, pos.x, 0} -- par 0 because of leaves
 	end
