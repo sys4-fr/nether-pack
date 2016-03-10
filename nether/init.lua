@@ -392,7 +392,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	--local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
 	--local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
 
-	local side_length = maxp.x - minp.x + 1	-- maybe mistake here
+	local side_length = maxp.x - minp.x + 1
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 
 	local pmap1 = minetest.get_perlin_map(perlins[1], map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
@@ -413,7 +413,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local num2, tab2
 	if buildings >= 1 then
 		num2 = 1
-		tab2 = nether_weird_noise({x=minp.x, y=nether.buildings-79, z=minp.z}, pymg, 200, 8, 10, 79)
+		tab2 = nether_weird_noise({x=minp.x, y=nether.buildings-79, z=minp.z}, pymg, 200, 8, 10, side_length-1)
 	end
 
 	local count = 0
