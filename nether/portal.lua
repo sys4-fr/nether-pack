@@ -224,9 +224,11 @@ if nether_prisons then
 		end
 	end
 
+	-- the function delayer mod works similar to a scheduler
+	local delay_function = minetest.delay_function or minetest.after
 	local function tick()
 		update_players()
-		minetest.after(2, tick)
+		minetest.after(0.5, function() delay_function(1.5, tick) end)
 	end
 	tick()
 
