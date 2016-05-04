@@ -139,7 +139,7 @@ local function do_ws_func(depth, a, x)
 	for k=1,depth do
 		y = y + math.sin(k^a * n) / k^a
 	end
-	return SIZE*y/math.pi
+	return SIZE * y / math.pi
 end
 
 local chunksize = minetest.setting_get("chunksize") or 5
@@ -161,10 +161,6 @@ end
 
 
 local function dif(z1, z2)
-	if z1 < 0
-	and z2 < 0 then
-		z1,z2 = -z1,-z2
-	end
 	return math.abs(z1-z2)
 end
 
