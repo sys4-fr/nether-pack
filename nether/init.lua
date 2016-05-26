@@ -303,13 +303,14 @@ end
 
 local f_perlins = {}
 
+-- abs(v) < 1-(persistance^octaves))/(1-persistance) = amp
 --local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
 --	local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
 --	local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
 local tmp = f_yscale_top*4
 local tmp2 = tmp/f_bottom_scale
 local perlins = {
-	{
+	{ -- amp 1.75
 		seed = 13,
 		octaves = 3,
 		persist = 0.5,
@@ -317,7 +318,7 @@ local perlins = {
 		scale = 1,
 		offset = 0,
 	},
-	{
+	{-- amp 1.75
 		seed = 133,
 		octaves = 3,
 		persist = 0.5,
@@ -325,7 +326,7 @@ local perlins = {
 		scale = 1,
 		offset = 0,
 	},
-	{
+	{-- amp 1.75
 		seed = 112,
 		octaves = 3,
 		persist = 0.5,
@@ -341,7 +342,7 @@ local perlins = {
 		scale = 1,
 		offset = 0,
 	},]]
-	forest_top = {
+	forest_top = {-- amp 2.44
 		seed = 21,
 		octaves = 3,
 		persist = 0.8,
