@@ -456,17 +456,18 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				py_h_g = nether.buildings-7
 			end
 
+			local vi = area:index(x, minp.y, z)
 			if buildings == 1
 			and noisp then
 				if noisp == 1 then
-					for y=minp.y, maxp.y do
-						local p_addpos = area:index(x, y, z)
-						data[p_addpos] = c.netherrack_brick
+					for _ = 1,side_length do
+						data[vi] = c.netherrack_brick
+						vi = vi + area.ystride
 					end
 				else
-					for y=minp.y, maxp.y do
-						local p_addpos = area:index(x, y, z)
-						data[p_addpos] = c.lava
+					for _ = 1,side_length do
+						data[vi] = c.lava
+						vi = vi + area.ystride
 					end
 				end
 			else
@@ -495,50 +496,49 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 
 				for y=minp.y, maxp.y do
-					local p_addpos = area:index(x, y, z)
-					local d_p_addp = data[p_addpos]
+					local d_p_addp = data[vi]
 					--if py_h >= maxp.y-4 then
 					if y <= py_h
 					and noisp then
 						if noisp == 1 then
-							data[p_addpos] = c.netherrack_brick
+							data[vi] = c.netherrack_brick
 						elseif noisp == 2 then
 							if y == py_h then
-								data[p_addpos] = c.netherrack_brick
+								data[vi] = c.netherrack_brick
 							elseif y == py_h_g
 							and pr:next(1,3) <= 2 then
-								data[p_addpos] = c.netherrack
+								data[vi] = c.netherrack
 							elseif y <= py_h_g then
-								data[p_addpos] = c.lava
+								data[vi] = c.lava
 							else
-								data[p_addpos] = c.air
+								data[vi] = c.air
 							end
 						end
 					elseif d_p_addp ~= c.air then
 
 						if is_forest
 						and y == f_bottom then
-							data[p_addpos] = c.nether_dirt_top
+							data[vi] = c.nether_dirt_top
 						elseif is_forest
 						and y < f_bottom
 						and y >= f_h_dirt then
-							data[p_addpos] = c.nether_dirt
+							data[vi] = c.nether_dirt
 						elseif is_forest
 						and y == f_h_dirt-1 then
-							data[p_addpos] = c.nether_dirt_bottom
+							data[vi] = c.nether_dirt_bottom
 						elseif is_forest
 						and y == f_h_dirt+1 then
 							if pr:next(1,tree_rarity) == 1 then
 								trees[num_trees] = {x=x, y=y, z=z}
 								num_trees = num_trees+1
 							elseif pr:next(1,mushroom_rarity) == 1 then
-								data[p_addpos] = c.nether_shroom
+								data[vi] = c.nether_shroom
 							elseif pr:next(1,glowflower_rarity) == 1 then
-								data[p_addpos] = c.glowflower
+								data[vi] = c.glowflower
 							elseif pr:next(1,grass_rarity) == 1 then
-								data[p_addpos] = c.nether_grass[pr:next(1,3)]
+								data[vi] = c.nether_grass[pr:next(1,3)]
 							else
-								data[p_addpos] = c.air
+								data[vi] = c.air
 							end
 						elseif is_forest
 						and y > f_bottom
@@ -547,26 +547,26 @@ minetest.register_on_generated(function(minp, maxp, seed)
 								{c.nether_tree, c.nether_tree_corner, c.nether_leaves, c.nether_fruit},
 								d_p_addp
 							) then
-								data[p_addpos] = c.air
+								data[vi] = c.air
 							end
 						elseif is_forest
 						and y == f_top then
 							local sel = math.floor(strassx[x]+strassz[z]+0.5)%10
 							if sel <= 5 then
-								data[p_addpos] = return_nether_ore(d_p_addp, true)
+								data[vi] = return_nether_ore(d_p_addp, true)
 							elseif sel == 6 then
-								data[p_addpos] = c.netherrack_black
+								data[vi] = c.netherrack_black
 							elseif sel == 7 then
-								data[p_addpos] = c.glowstone
+								data[vi] = c.glowstone
 							else
-								data[p_addpos] = c.air
+								data[vi] = c.air
 							end
 
 						elseif y <= NETHER_BOTTOM then
 							if y <= bottom then
-								data[p_addpos] = return_nether_ore(d_p_addp, true)
+								data[vi] = return_nether_ore(d_p_addp, true)
 							else
-								data[p_addpos] = c.lava
+								data[vi] = c.lava
 							end
 						elseif r_structure == 1
 						and y == bottom then
@@ -574,26 +574,27 @@ minetest.register_on_generated(function(minp, maxp, seed)
 							num = num+1
 						elseif y <= bottom then
 							if pr:next(1,LAVA_FREQ) == 1 then
-								data[p_addpos] = c.lava
+								data[vi] = c.lava
 							else
-								data[p_addpos] = return_nether_ore(d_p_addp, false)
+								data[vi] = return_nether_ore(d_p_addp, false)
 							end
 						elseif r_shroom == 1
 						and r_structure ~= 1
 						and y == bottom+1 then
-							data[p_addpos] = c.nether_shroom
+							data[vi] = c.nether_shroom
 						elseif (y == top and r_glowstone == 1) then
-							data[p_addpos] = c.glowstone
+							data[vi] = c.glowstone
 						elseif y >= top then
-							data[p_addpos] = return_nether_ore(d_p_addp, true)
+							data[vi] = return_nether_ore(d_p_addp, true)
 						elseif y <= top-1
 						and generate_vine
 						and y >= top-r_vine_length then
-							data[p_addpos] = c.nether_vine
+							data[vi] = c.nether_vine
 						else
-							data[p_addpos] = c.air
+							data[vi] = c.air
 						end
 					end
+					vi = vi + area.ystride
 				end
 			end
 		end
@@ -649,8 +650,10 @@ function nether.grow_netherstructure(pos, generated)
 	local area = r_area(manip, 2, height, pos)
 	local nodes = manip:get_data()
 
-	for i = 0, height-1 do
-		nodes[area:index(pos.x, pos.y+i, pos.z)] = c.blood_stem
+	local vi = area:indexp(pos)
+	for _ = 0, height-1 do
+		nodes[vi] = c.blood_stem
+		vi = vi + area.ystride
 	end
 
 	for i = -1,1 do
