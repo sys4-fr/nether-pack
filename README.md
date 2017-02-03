@@ -22,4 +22,5 @@ If you got ideas or found bugs, please tell them to me.
 
 TODO:  
 — find a way to get the perlin noise inside [-1; 1] or use another noise  
-— add something containing items to that buildings
+— add something containing items to that buildings  
+— update leaves visual_scale
