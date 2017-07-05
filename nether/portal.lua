@@ -2,7 +2,7 @@
 
 -- kills the player if he uses PilzAdam portal
 local portal_target = nether.buildings+1
-local nether_prisons = minetest.setting_getbool("enable_damage")
+local nether_prisons = minetest.settings:get_bool("enable_damage")
 local obsidian_portal_kills = nether_prisons and true
 local mclike_portal = false
 
@@ -549,7 +549,7 @@ minetest.after(0.1, function()
 						player:get_player_name(),
 						"Warning: If you are in the nether you may not be able to find the way out!"
 					)
-					if not minetest.setting_getbool("creative_mode") then
+					if not minetest.settings:get_bool("creative_mode") then
 						stack:take_item()
 					end
 				end

@@ -7,7 +7,7 @@ local function table_contains(t, v)
 	return false
 end
 
-local creative = minetest.setting_getbool("creative_mode")
+local creative = minetest.settings:get_bool("creative_mode")
 local function throw_pearl(item, player)
 	local playerpos = player:getpos()
 	playerpos.y = playerpos.y+1.625

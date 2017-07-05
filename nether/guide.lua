@@ -291,7 +291,7 @@ local guide_size = {x=40, y=10, cx=0.2, cy=0.2}
 local formspec_offset = {x=0.25, y=0.50}
 local font_size
 if minetest.is_singleplayer() then
-	font_size = tonumber(minetest.setting_get("font_size")) or 13
+	font_size = tonumber(minetest.settings:get("font_size")) or 13
 else
 	font_size = 13
 end
