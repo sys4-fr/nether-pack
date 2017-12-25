@@ -52,9 +52,6 @@ local grass_rarity = 2
 -- Frequency of nether mushrooms in the nether forest (higher is less frequent)
 local mushroom_rarity = 80
 
--- Frequency of trees in the nether forest (higher is less frequent)
-local tree_rarity = 200
-
 local abm_tree_interval = 864
 local abm_tree_chance = 100
 
@@ -110,7 +107,7 @@ if nether.info then
 		end
 	end
 else
-	function nether:inform()
+	function nether.inform()
 	end
 end
 
@@ -205,7 +202,7 @@ end
 -- Generated variables
 local NETHER_BOTTOM = (nether_middle - NETHER_HEIGHT)
 nether.buildings = NETHER_BOTTOM+12
-local NETHER_ROOF_ABS = (nether_middle - NETHER_RANDOM)
+--~ local NETHER_ROOF_ABS = (nether_middle - NETHER_RANDOM)
 local f_yscale_top = (f_h_max-f_h_min)/2
 local f_yscale_bottom = f_yscale_top/2
 --HADES_THRONE_STARTPOS_ABS = {x=HADES_THRONE_STARTPOS.x, y=(NETHER_BOTTOM + HADES_THRONE_STARTPOS.y), z=HADES_THRONE_STARTPOS.z}
@@ -352,7 +349,6 @@ local perlins = {
 	},
 }
 
-local info = true
 local structures_enabled = true
 local vine_maxlength = math.floor(NETHER_HEIGHT/4+0.5)
 -- Create the Nether
@@ -360,7 +356,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	if not (maxp.y >= NETHER_BOTTOM-100 and minp.y <= nether.start) then --avoid big map generation
 		return
 	end
-	local addpos = {}
 
 	local t1 = os.clock()
 	nether:inform("generates at: x=["..minp.x.."; "..maxp.x.."]; y=["..minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]", 2)
