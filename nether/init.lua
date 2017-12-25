@@ -692,9 +692,8 @@ function nether.grow_netherstructure(pos, generated)
 end
 
 
-local set = vector.set_data_to_pos
-local get = vector.get_data_from_pos
-local remove = vector.remove_data_from_pos
+local poshash = minetest.hash_node_position
+local pos_from_hash = minetest.get_position_from_hash
 
 local function soft_node(id)
 	return id == c.air or id == c.ignore
@@ -775,15 +774,17 @@ function nether.grow_tree(pos, generated)
 			for j = 1,r do
 				local x = p.x+j*dir[1]
 				local z = p.z+j*dir[2]
-				set(trunks, z,p.y,x, dir[3])
+				trunks[poshash{x=x, y=p.y, z=z}] = dir[3]
 			end
 			r = r+1
 			p.x = p.x+r*dir[1]
 			p.z = p.z+r*dir[2]
-			set(trunk_corners, p.z,p.y,p.x, dir[4] or dir[3])
+			trunk_corners[poshash(p)] = dir[4] or dir[3]
 			local h = math.random(h_arm_min, h_arm_max)
 			for i = 1,h do
-				set(trunks, p.z,p.y+i,p.x, true)
+				p.y = p.y + i
+				trunks[poshash(p)] = true
+				p.y = p.y - i
 			end
 			p.y = p.y+h
 			--n = #todo+1 -- caused small trees
@@ -799,10 +800,16 @@ function nether.grow_tree(pos, generated)
 	local fruits = {}
 	local trunk_ps = {}
 	local count = 0
-	local ps, trmin, trmax, trunk_count = vector.get_data_pos_table(trunks)
 
-	update_minmax(min, max, trmin)
-	update_minmax(min, max, trmax)
+	local ps = {}
+	local trunk_count = 0
+	for i,par2 in pairs(trunks) do
+		local pos = pos_from_hash(i)
+		update_minmax(min, max, pos)
+		local z,y,x = pos.z, pos.y, pos.x
+		trunk_count = trunk_count+1
+		ps[trunk_count] = {z,y,x, par2}
+	end
 
 	for _,d in pairs(ps) do
 		if d[4] == true then
@@ -823,13 +830,14 @@ function nether.grow_tree(pos, generated)
 							local x = x+px
 							local y = y+py
 							local z = z+pz
-							if not get(trunks, z,y,x) then
+							local vi = poshash{x=x, y=y, z=z}
+							if not trunks[vi] then
 								if fruit_chance
 								and math.random(1, fruit_rarity) == 1
 								and math.random(1, fruit_chance) == 1 then
-									set(fruits, z,y,x, true)
+									fruits[vi] = true
 								else
-									set(leaves, z,y,x, true)
+									leaves[vi] = true
 								end
 								update_minmax(min, max, {x=x, z=z})
 							end
@@ -853,8 +861,8 @@ function nether.grow_tree(pos, generated)
 	local nodes = manip:get_data()
 	local param2s = manip:get_param2_data()
 
-	for _,p in pairs(vector.get_data_pos_table(leaves)) do
-		p = area:index(p[3], p[2], p[1])
+	for i in pairs(leaves) do
+		local p = area:indexp(pos_from_hash(i))
 		if soft_node(nodes[p]) then
 			nodes[p] = c.nether_leaves
 			param2s[p] = math.random(0,179)
@@ -862,14 +870,15 @@ function nether.grow_tree(pos, generated)
 		end
 	end
 
-	for _,p in pairs(vector.get_data_pos_table(fruits)) do
-		p = area:index(p[3], p[2], p[1])
+	for i in pairs(fruits) do
+		local p = area:indexp(pos_from_hash(i))
 		if soft_node(nodes[p]) then
 			nodes[p] = c.nether_apple
 		end
 	end
 
-	for _,p in pairs(trunk_ps) do
+	for i = 1,#trunk_ps do
+		local p = trunk_ps[i]
 		local par = p[4]
 		p = area:index(p[3], p[2], p[1])
 		if par then
@@ -878,10 +887,10 @@ function nether.grow_tree(pos, generated)
 		nodes[p] = c.nether_tree
 	end
 
-	for _,p in pairs(vector.get_data_pos_table(trunk_corners)) do
-		local vi = area:index(p[3], p[2], p[1])
+	for i,par2 in pairs(trunk_corners) do
+		local vi = area:indexp(pos_from_hash(i))
 		nodes[vi] = c.nether_tree_corner
-		param2s[vi] = p[4]
+		param2s[vi] = par2
 	end
 
 	manip:set_data(nodes)
