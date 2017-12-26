@@ -11,7 +11,7 @@
 -- godkiller447 (ideas)
 -- If I didn't list you, please let me know!
 
-local load_time_start = os.clock()
+local load_time_start = minetest.get_us_time()
 
 if not rawget(_G, "nether") then
 	nether = {}
@@ -99,10 +99,10 @@ if nether.info then
 		if spam <= self.max_spam then
 			local info
 			if t then
-				info = "[nether] " .. msg ..
-					(" after ca. %.2fs"):format(os.clock() - t)
+				info = "[nether] " .. msg .. (" after ca. %.3g s"):format(
+					(minetest.get_us_time() - t) / 1000000)
 			else
-				info = "[nether] "..msg
+				info = "[nether] " .. msg
 			end
 			print(info)
 			if self.inform_all then
@@ -343,7 +343,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		return
 	end
 
-	local t1 = os.clock()
+	local t1 = minetest.get_us_time()
 	nether:inform("generates at: x=["..minp.x.."; "..maxp.x.."]; y=[" ..
 		minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]", 2)
 
@@ -596,23 +596,28 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 	nether:inform("nodes set", 2, t1)
 
-	local t2 = os.clock()
+	local t2 = minetest.get_us_time()
+	local tr_bl_cnt = 0
 
-	if structures_enabled then
-		for _,v in ipairs(tab) do
-			nether.grow_netherstructure(v, true)
+	if structures_enabled then -- Blood netherstructures
+		tr_bl_cnt = #tab
+		for i = 1,tr_bl_cnt do
+			nether.grow_netherstructure(tab[i], true)
 		end
 	end
 
-	if forest_possible then --Trees:
-		for _,v in ipairs(trees) do
-			nether.grow_tree(v, true)
+	if forest_possible then -- Forest trees
+		tr_bl_cnt = tr_bl_cnt + #trees
+		for i = 1,#trees do
+			nether.grow_tree(trees[i], true)
 		end
 	end
 
-	nether:inform("trees set", 2, t2)
+	if tr_bl_cnt > 0 then
+		nether:inform(tr_bl_cnt .. " trees and blood structures set", 2, t2)
+	end
 
-	t2 = os.clock()
+	t2 = minetest.get_us_time()
 	minetest.fix_light(minp, maxp)
 
 	nether:inform("light fixed", 2, t2)
@@ -622,7 +627,7 @@ end)
 
 
 function nether.grow_netherstructure(pos, generated)
-	local t1 = os.clock()
+	local t1 = minetest.get_us_time()
 
 	if not contents_defined then
 		define_contents()
@@ -720,7 +725,7 @@ local leaf_thickness = 3 --a bigger number results in more blank trees
 local h_trunk_max = h_max-h_arm_max
 
 function nether.grow_tree(pos, generated)
-	local t1 = os.clock()
+	local t1 = minetest.get_us_time()
 
 	if not contents_defined then
 		define_contents()
@@ -1019,9 +1024,9 @@ dofile(path.."/portal.lua")
 dofile(path.."/guide.lua")
 
 
-local time = math.floor(tonumber(os.clock()-load_time_start)*100+0.5)/100
-local msg = "[nether] loaded after ca. "..time
-if time > 0.05 then
+local time = (minetest.get_us_time() - load_time_start) / 1000000
+local msg = ("[nether] loaded after ca. %g seconds."):format(time)
+if time > 0.01 then
 	print(msg)
 else
 	minetest.log("info", msg)
