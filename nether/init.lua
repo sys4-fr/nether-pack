@@ -170,28 +170,9 @@ end
 
 local function set_vm_data(manip, nodes, pos, t1, name, generated)
 	manip:set_data(nodes)
-	manip:write_to_map()
-	local spam = 2
-	if generated then
-		spam = 3
-	end
-	nether:inform(name.." grew at " .. minetest.pos_to_string(pos), spam, t1)
-	if not generated then
-		local t1 = os.clock()
-		manip:update_map()
-		nether:inform("map updated", spam, t1)
-	end
-end
-
-local function fix_light(minp, maxp)
-	local manip = minetest.get_voxel_manip()
-	local emerged_pos1, emerged_pos2 = manip:read_from_map(minp, maxp)
-	area = VoxelArea:new({MinEdge=emerged_pos1, MaxEdge=emerged_pos2})
-	nodes = manip:get_data()
-
-	manip:set_data(nodes)
-	manip:write_to_map()
-	manip:update_map()
+	manip:write_to_map(not generated)
+	nether:inform(name.." grew at " .. minetest.pos_to_string(pos),
+		generated and 3 or 2, t1)
 end
 
 -- Generated variables
@@ -611,19 +592,19 @@ minetest.register_on_generated(function(minp, maxp, seed)
 --	vm:set_lighting(12)
 --	vm:calc_lighting()
 --	vm:update_liquids()
-	vm:write_to_map()
+	vm:write_to_map(false)
 
 	nether:inform("nodes set", 2, t1)
 
 	local t2 = os.clock()
 
-	if structures_enabled then	--Trees:
+	if structures_enabled then
 		for _,v in ipairs(tab) do
 			nether.grow_netherstructure(v, true)
 		end
 	end
 
-	if forest_possible then	--Trees:
+	if forest_possible then --Trees:
 		for _,v in ipairs(trees) do
 			nether.grow_tree(v, true)
 		end
@@ -632,9 +613,9 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	nether:inform("trees set", 2, t2)
 
 	t2 = os.clock()
-	fix_light(minp, maxp)
+	minetest.fix_light(minp, maxp)
 
-	nether:inform("map updated", 2, t2)
+	nether:inform("light fixed", 2, t2)
 
 	nether:inform("done", 1, t1)
 end)
@@ -904,18 +885,10 @@ function nether.grow_tree(pos, generated)
 
 	manip:set_data(nodes)
 	manip:set_param2_data(param2s)
-	manip:write_to_map()
-	local spam = 2
-	if generated then
-		spam = 3
-	end
+	manip:write_to_map(not generated)
 	nether:inform("a nether tree with " .. trunk_count ..
-		" branch trunk nodes grew at " .. minetest.pos_to_string(pos), spam, t1)
-	if not generated then
-		local t1 = os.clock()
-		manip:update_map()
-		nether:inform("map updated", spam, t1)
-	end
+		" branch trunk nodes grew at " .. minetest.pos_to_string(pos),
+		generated and 3 or 2, t1)
 end
 
 
