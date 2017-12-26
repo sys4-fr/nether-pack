@@ -83,11 +83,14 @@ local NETHER_SHROOM_FREQ = 100
 --NETHER_APPLE_FREQ = 5
 -- Frequency of healing apples in a nether structure (higher is less frequent)
 --NETHER_HEAL_APPLE_FREQ = 10
--- Start position for the Throne of Hades (y is relative to the bottom of the nether)
+-- Start position for the Throne of Hades (y is relative to the bottom of the
+-- nether)
 --HADES_THRONE_STARTPOS = {x=0, y=1, z=0}
--- Spawn pos for when the nether hasn't been loaded yet (i.e. no portal in the nether) (y is relative to the bottom of the nether)
+-- Spawn pos for when the nether hasn't been loaded yet (i.e. no portal in the
+-- nether) (y is relative to the bottom of the nether)
 --NETHER_SPAWNPOS = {x=0, y=5, z=0}
--- Structure of the nether portal (all is relative to the nether portal creator block)
+-- Structure of the nether portal (all is relative to the nether portal creator
+-- block)
 
 --== END OF EDITABLE OPTIONS ==--
 
@@ -96,7 +99,8 @@ if nether.info then
 		if spam <= self.max_spam then
 			local info
 			if t then
-				info = string.format("[nether] "..msg.." after ca. %.2fs", os.clock() - t)
+				info = "[nether] " .. msg ..
+					(" after ca. %.2fs"):format(os.clock() - t)
 			else
 				info = "[nether] "..msg
 			end
@@ -112,20 +116,11 @@ else
 end
 
 
-local path = minetest.get_modpath("nether")
+local path = minetest.get_modpath"nether"
 dofile(path.."/weird_mapgen_noise.lua")
 dofile(path.."/items.lua")
 --dofile(path.."/furnace.lua")
 dofile(path.."/pearl.lua")
-
-local function table_contains(t, v)
-	for _,i in pairs(t) do
-		if i == v then
-			return true
-		end
-	end
-	return false
-end
 
 -- Weierstrass function stuff from https://github.com/slemonide/gen
 local SIZE = 1000
@@ -139,7 +134,7 @@ local function do_ws_func(depth, a, x)
 	return SIZE * y / math.pi
 end
 
-local chunksize = minetest.settings:get("chunksize") or 5
+local chunksize = minetest.settings:get"chunksize" or 5
 local ws_lists = {}
 local function get_ws_list(a,x)
         ws_lists[a] = ws_lists[a] or {}
@@ -180,7 +175,7 @@ local function set_vm_data(manip, nodes, pos, t1, name, generated)
 	if generated then
 		spam = 3
 	end
-	nether:inform(name.." grew at ("..pos.x.."|"..pos.y.."|"..pos.z..")", spam, t1)
+	nether:inform(name.." grew at " .. minetest.pos_to_string(pos), spam, t1)
 	if not generated then
 		local t1 = os.clock()
 		manip:update_map()
@@ -205,12 +200,14 @@ nether.buildings = NETHER_BOTTOM+12
 --~ local NETHER_ROOF_ABS = (nether_middle - NETHER_RANDOM)
 local f_yscale_top = (f_h_max-f_h_min)/2
 local f_yscale_bottom = f_yscale_top/2
---HADES_THRONE_STARTPOS_ABS = {x=HADES_THRONE_STARTPOS.x, y=(NETHER_BOTTOM + HADES_THRONE_STARTPOS.y), z=HADES_THRONE_STARTPOS.z}
+--HADES_THRONE_STARTPOS_ABS = {x=HADES_THRONE_STARTPOS.x, y=(NETHER_BOTTOM +
+--HADES_THRONE_STARTPOS.y), z=HADES_THRONE_STARTPOS.z}
 --LAVA_Y = (NETHER_BOTTOM + LAVA_HEIGHT)
 --HADES_THRONE_ABS = {}
 --HADES_THRONE_ENDPOS_ABS = {}
 --HADES_THRONE_GENERATED = minetest.get_worldpath() .. "/netherhadesthrone.txt"
---NETHER_SPAWNPOS_ABS = {x=NETHER_SPAWNPOS.x, y=(NETHER_BOTTOM + NETHER_SPAWNPOS.y), z=NETHER_SPAWNPOS.z}
+--NETHER_SPAWNPOS_ABS = {x=NETHER_SPAWNPOS.x, y=(NETHER_BOTTOM +
+--NETHER_SPAWNPOS.y), z=NETHER_SPAWNPOS.z}
 --[[for i,v in ipairs(HADES_THRONE) do
 	v.pos.x = v.pos.x + HADES_THRONE_STARTPOS_ABS.x
 	v.pos.y = v.pos.y + HADES_THRONE_STARTPOS_ABS.y
@@ -233,7 +230,7 @@ for i,v in ipairs(HADES_THRONE_ABS) do
 end
 HADES_THRONE_ENDPOS_ABS = {x=htx, y=hty, z=htz}]]
 
-local c
+local c, nether_tree_nodes
 local function define_contents()
 	c = {
 		ignore = minetest.get_content_id("ignore"),
@@ -244,7 +241,8 @@ local function define_contents()
 		diamond = minetest.get_content_id("default:stone_with_diamond"),
 		mese = minetest.get_content_id("default:mese"),
 
-		glowstone = minetest.get_content_id("glow:stone"), --https://github.com/Zeg9/minetest-glow
+		--https://github.com/Zeg9/minetest-glow
+		glowstone = minetest.get_content_id("glow:stone"),
 
 		nether_shroom = minetest.get_content_id("riesenpilz:nether_shroom"),
 
@@ -274,6 +272,12 @@ local function define_contents()
 		nether_dirt_top = minetest.get_content_id("nether:dirt_top"),
 		nether_dirt_bottom = minetest.get_content_id("nether:dirt_bottom"),
 	}
+	local trn = {c.nether_tree, c.nether_tree_corner, c.nether_leaves,
+		c.nether_fruit}
+	nether_tree_nodes = {}
+	for i = 1,#trn do
+		nether_tree_nodes[trn[i]] = true
+	end
 end
 
 local pr, contents_defined
@@ -301,7 +305,7 @@ end
 local f_perlins = {}
 
 -- abs(v) < 1-(persistance^octaves))/(1-persistance) = amp
---local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
+--local perlin1 = minetest.get_perlin(13,3, 0.5, 50) --Get map specific perlin
 --	local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
 --	local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
 local tmp = f_yscale_top*4
@@ -353,12 +357,14 @@ local structures_enabled = true
 local vine_maxlength = math.floor(NETHER_HEIGHT/4+0.5)
 -- Create the Nether
 minetest.register_on_generated(function(minp, maxp, seed)
-	if not (maxp.y >= NETHER_BOTTOM-100 and minp.y <= nether.start) then --avoid big map generation
+	--avoid big map generation
+	if not (maxp.y >= NETHER_BOTTOM-100 and minp.y <= nether.start) then
 		return
 	end
 
 	local t1 = os.clock()
-	nether:inform("generates at: x=["..minp.x.."; "..maxp.x.."]; y=["..minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]", 2)
+	nether:inform("generates at: x=["..minp.x.."; "..maxp.x.."]; y=[" ..
+		minp.y.."; "..maxp.y.."]; z=["..minp.z.."; "..maxp.z.."]", 2)
 
 	if not contents_defined then
 		define_contents()
@@ -380,24 +386,29 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local tab,num = {},1
 	local trees,num_trees = {},1
 
-	--local perlin1 = minetest.get_perlin(13,3, 0.5, 50)	--Get map specific perlin
+	--local perlin1 = minetest.get_perlin(13,3, 0.5, 50)
 	--local perlin2 = minetest.get_perlin(133,3, 0.5, 10)
 	--local perlin3 = minetest.get_perlin(112,3, 0.5, 5)
 
 	local side_length = maxp.x - minp.x + 1
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 
-	local pmap1 = minetest.get_perlin_map(perlins[1], map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
-	local pmap2 = minetest.get_perlin_map(perlins[2], map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
-	local pmap3 = minetest.get_perlin_map(perlins[3], map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
+	local pmap1 = minetest.get_perlin_map(perlins[1], map_lengths_xyz
+		):get2dMap_flat{x=minp.x, y=minp.z}
+	local pmap2 = minetest.get_perlin_map(perlins[2], map_lengths_xyz
+		):get2dMap_flat{x=minp.x, y=minp.z}
+	local pmap3 = minetest.get_perlin_map(perlins[3], map_lengths_xyz
+		):get2dMap_flat{x=minp.x, y=minp.z}
 
 	local forest_possible = maxp.y > f_h_min and minp.y < f_h_max
 
-	--local pmap_f_bottom = minetest.get_perlin_map(perlins.forest_bottom, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
+	--local pmap_f_bottom = minetest.get_perlin_map(perlins.forest_bottom,
+	-- map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
 	local perlin_f_bottom, pmap_f_top, strassx, strassz
 	if forest_possible then
 		perlin_f_bottom = minetest.get_perlin(11, 3, 0.8, tmp2)
-		pmap_f_top = minetest.get_perlin_map(perlins.forest_top, map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
+		pmap_f_top = minetest.get_perlin_map(perlins.forest_top, map_lengths_xyz
+			):get2dMap_flat{x=minp.x, y=minp.z}
 		strassx = get_ws_list(2, minp.x)
 		strassz = get_ws_list(2, minp.z)
 	end
@@ -405,7 +416,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local num2, tab2
 	if buildings >= 1 then
 		num2 = 1
-		tab2 = nether_weird_noise({x=minp.x, y=nether.buildings-79, z=minp.z}, pymg, 200, 8, 10, side_length-1)
+		tab2 = nether_weird_noise({x=minp.x, y=nether.buildings-79, z=minp.z},
+			pymg, 200, 8, 10, side_length-1)
 	end
 
 	local count = 0
@@ -474,15 +486,19 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 				local f_bottom, f_top, is_forest, f_h_dirt
 				if forest_possible then
-					local p = {x=math.floor(x/f_bottom_scale), z=math.floor(z/f_bottom_scale)}
+					local p = {x=math.floor(x/f_bottom_scale),
+						z=math.floor(z/f_bottom_scale)}
 					local pstr = p.x.." "..p.z
 					if not f_perlins[pstr] then
-						f_perlins[pstr] = math.floor(f_h_min+(math.abs(perlin_f_bottom:get2d({x=p.x, y=p.z})+1))*f_yscale_bottom+0.5)
+						f_perlins[pstr] = math.floor(f_h_min + (math.abs(
+							perlin_f_bottom:get2d{x=p.x, y=p.z} + 1))
+							* f_yscale_bottom + 0.5)
 					end
 					local top_noise = pmap_f_top[count]+1
 					if top_noise < 0 then
 						top_noise = -top_noise/10
-						--nether:inform("ERROR: (perlin noise) "..pmap_f_top[count].." is not inside [-1; 1]", 1)
+						--nether:inform("ERROR: (perlin noise) "..
+						-- pmap_f_top[count].." is not inside [-1; 1]", 1)
 					end
 					f_top = math.floor(f_h_max - top_noise*f_yscale_top + 0.5)
 					f_bottom = f_perlins[pstr]+pr:next(0,f_bottom_scale-1)
@@ -538,10 +554,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 						elseif is_forest
 						and y > f_bottom
 						and y < f_top then
-							if not table_contains(
-								{c.nether_tree, c.nether_tree_corner, c.nether_leaves, c.nether_fruit},
-								d_p_addp
-							) then
+							if not nether_tree_nodes[d_p_addp] then
 								data[vi] = c.air
 							end
 						elseif is_forest
@@ -847,7 +860,8 @@ function nether.grow_tree(pos, generated)
 	--collectgarbage()
 
 	for i = -1,h_stem+1 do
-		trunk_ps[#trunk_ps+1] = {pos.z, pos.y+i, pos.x, 0} -- par 0 because of leaves
+		-- param2 explicitly set 0 due to possibly previous leaves node
+		trunk_ps[#trunk_ps+1] = {pos.z, pos.y+i, pos.x, 0}
 	end
 
 	local manip = minetest.get_voxel_manip()
@@ -895,7 +909,8 @@ function nether.grow_tree(pos, generated)
 	if generated then
 		spam = 3
 	end
-	nether:inform("a nether tree with "..trunk_count.." branch trunk nodes grew at ("..pos.x.."|"..pos.y.."|"..pos.z..")", spam, t1)
+	nether:inform("a nether tree with " .. trunk_count ..
+		" branch trunk nodes grew at " .. minetest.pos_to_string(pos), spam, t1)
 	if not generated then
 		local t1 = os.clock()
 		manip:update_map()
@@ -929,7 +944,8 @@ minetest.register_abm({
 	action = function(pos)
 		if minetest.get_node({x=pos.x, y=pos.y+2, z=pos.z}).name == "air"
 		and minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name == "air" then
-			local udata = minetest.registered_nodes[minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name]
+			local udata = minetest.registered_nodes[
+				minetest.get_node{x=pos.x, y=pos.y-1, z=pos.z}.name]
 			if udata
 			and udata.groups
 			and udata.groups.nether_dirt then
@@ -950,13 +966,15 @@ minetest.register_abm({
 			return
 		end
 		pos.y = pos.y+1
-		if (minetest.get_node_light(pos) or 16) > 7 then --mushrooms grow at dark places
+		--mushrooms grow at dark places
+		if (minetest.get_node_light(pos) or 16) > 7 then
 			return
 		end
 		if minetest.get_node(pos).name == "air" then
 			minetest.set_node(pos, {name="riesenpilz:nether_shroom"})
 			pos.y = pos.y-1
-			minetest.set_node(pos, {name="nether:netherrack_soil", param2=par2-1})
+			minetest.set_node(pos,
+				{name="nether:netherrack_soil", param2=par2-1})
 		end
 	end
 })
@@ -1020,7 +1038,8 @@ minetest.register_abm({
 })
 
 
-minetest.register_privilege("nether", "Allows sending players to nether and extracting them")
+minetest.register_privilege("nether",
+	"Allows sending players to nether and extracting them")
 
 dofile(path.."/crafting.lua")
 dofile(path.."/portal.lua")
