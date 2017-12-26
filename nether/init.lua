@@ -970,6 +970,10 @@ local function grass_allowed(pos)
 		return 0
 	end
 	local data = minetest.registered_nodes[nd]
+	if not data then
+		-- unknown node
+		return false
+	end
 	local drawtype = data.drawtype
 	if drawtype
 	and drawtype ~= "normal"
