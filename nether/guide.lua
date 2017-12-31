@@ -247,11 +247,11 @@ local guide_infos = {
 		{"y", 0.3},
 		{"text", "A nether portal requires following nodes:"},
 		{"y", 0.05},
-		{"text", "21 empty nether wooden planks\n"..
+		{"text", "25 empty nether wooden planks\n"..
+			"16 black netherrack\n"..
 			"12 blue netherrack bricks\n"..
-			"12 black netherrack\n"..
 			"8 red netherrack\n"..
-			"8 cooked nether wood\n"..
+			"8 cooked nether blood\n"..
 			"4 nether fruits\n"..
 			"2 siwtonic blocks"},
 		{"y", 0.2},
