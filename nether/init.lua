@@ -334,6 +334,14 @@ local perlins = {
 	},
 }
 
+-- buffers, see https://forum.minetest.net/viewtopic.php?f=18&t=16043
+local pelin_maps
+local pmap1 = {}
+local pmap2 = {}
+local pmap3 = {}
+local pmap_f_top = {}
+local data = {}
+
 local structures_enabled = true
 local vine_maxlength = math.floor(NETHER_HEIGHT/4+0.5)
 -- Create the Nether
@@ -360,7 +368,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end
 
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
-	local data = vm:get_data()
+	vm:get_data(data)
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 
 	pr = PseudoRandom(seed+33)
@@ -374,22 +382,27 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local side_length = maxp.x - minp.x + 1
 	local map_lengths_xyz = {x=side_length, y=side_length, z=side_length}
 
-	local pmap1 = minetest.get_perlin_map(perlins[1], map_lengths_xyz
-		):get2dMap_flat{x=minp.x, y=minp.z}
-	local pmap2 = minetest.get_perlin_map(perlins[2], map_lengths_xyz
-		):get2dMap_flat{x=minp.x, y=minp.z}
-	local pmap3 = minetest.get_perlin_map(perlins[3], map_lengths_xyz
-		):get2dMap_flat{x=minp.x, y=minp.z}
+	if not pelin_maps then
+		pelin_maps = {
+			a = minetest.get_perlin_map(perlins[1], map_lengths_xyz),
+			b = minetest.get_perlin_map(perlins[2], map_lengths_xyz),
+			c = minetest.get_perlin_map(perlins[3], map_lengths_xyz),
+			forest_top = minetest.get_perlin_map(perlins.forest_top,
+				map_lengths_xyz),
+		}
+	end
+	pelin_maps.a:get2dMap_flat({x=minp.x, y=minp.z}, pmap1)
+	pelin_maps.b:get2dMap_flat({x=minp.x, y=minp.z}, pmap2)
+	pelin_maps.c:get2dMap_flat({x=minp.x, y=minp.z}, pmap3)
 
 	local forest_possible = maxp.y > f_h_min and minp.y < f_h_max
 
 	--local pmap_f_bottom = minetest.get_perlin_map(perlins.forest_bottom,
 	-- map_lengths_xyz):get2dMap_flat({x=minp.x, y=minp.z})
-	local perlin_f_bottom, pmap_f_top, strassx, strassz
+	local perlin_f_bottom, strassx, strassz
 	if forest_possible then
 		perlin_f_bottom = minetest.get_perlin(11, 3, 0.8, tmp2)
-		pmap_f_top = minetest.get_perlin_map(perlins.forest_top, map_lengths_xyz
-			):get2dMap_flat{x=minp.x, y=minp.z}
+		pelin_maps.forest_top:get2dMap_flat({x=minp.x, y=minp.z}, pmap_f_top)
 		strassx = get_ws_list(2, minp.x)
 		strassz = get_ws_list(2, minp.z)
 	end
