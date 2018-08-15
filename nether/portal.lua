@@ -58,17 +58,17 @@ end
 
 -- returns nodename if area is generated, else calls generation function
 local function generated_or_generate(pos)
-	local name = minetest.get_node(pos).name
-	if name ~= "ignore" then
-		return name
+	local node = minetest.get_node_or_nil(pos)
+	if node then
+		return node.name
 	end
 	minetest.get_voxel_manip():read_from_map(pos, pos)
-	name = minetest.get_node_or_nil(pos)
-	if not name then
+	node = minetest.get_node_or_nil(pos)
+	if not node then
 		minetest.emerge_area(vector.subtract(pos, 80), vector.add(pos, 80))
 		return false
 	end
-	return name.name
+	return node.name
 end
 
 -- where the player appears after dying
