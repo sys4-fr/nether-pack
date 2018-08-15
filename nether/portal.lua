@@ -73,14 +73,16 @@ end
 
 -- where the player appears after dying
 local function get_player_died_target(player)
-	local target = vector.add(player:getpos(), {x=math.random(-100,100), y=0, z=math.random(-100,100)})
+	local target = vector.add(player:getpos(),
+		{x=math.random(-100,100), y=0, z=math.random(-100,100)})
 	target.y = portal_target + math.random(4)
 	return target
 end
 
 -- used for obsidian portal
 local function obsidian_teleport(player, pname)
-	minetest.chat_send_player(pname, "For any reason you arrived here. Type /nether_help to find out things like craft recipes.")
+	minetest.chat_send_player(pname, "For any reason you arrived here. Type " ..
+		"/nether_help to find out things like craft recipes.")
 	if obsidian_portal_kills then
 		player:set_hp(0)
 		return true
@@ -104,7 +106,8 @@ local function player_to_nether(player, safe)
 	players_in_nether[#players_in_nether+1] = pname
 	save_nether_players()
 	if not safe then
-		minetest.chat_send_player(pname, "For any reason you arrived here. Type /nether_help to find out things like craft recipes.")
+		minetest.chat_send_player(pname, "For any reason you arrived here. " ..
+			"Type /nether_help to find out things like craft recipes.")
 		player:set_hp(0)
 		if not nether_prisons then
 			player:moveto(get_player_died_target(player))
@@ -144,7 +147,8 @@ minetest.register_chatcommand("to_hell", {
 	description = "Send someone to hell",
 	func = function(name, pname)
 		if not minetest.check_player_privs(name, {nether=true}) then
-			return false, "You need the nether priv to execute this chatcommand."
+			return false,
+				"You need the nether privilege to execute this chatcommand."
 		end
 		if not player_exists(pname) then
 			pname = name
@@ -164,7 +168,8 @@ minetest.register_chatcommand("from_hell", {
 	description = "Extract from hell",
 	func = function(name, pname)
 		if not minetest.check_player_privs(name, {nether=true}) then
-			return false, "You need the nether priv to execute this chatcommand."
+			return false,
+				"You need the nether priv to execute this chatcommand."
 		end
 		if not player_exists(pname) then
 			pname = name
@@ -330,7 +335,8 @@ minetest.register_abm({
 		end
 		particledef.minpos = {x=pos.x-0.25, y=pos.y-0.5, z=pos.z-0.25}
 		particledef.maxpos = {x=pos.x+0.25, y=pos.y+0.34, z=pos.z+0.25}
-		particledef.texture = "nether_portal_particle.png^[transform"..math.random(0,7)
+		particledef.texture = "nether_portal_particle.png^[transform" ..
+			math.random(0, 7)
 		minetest.add_particlespawner(particledef)
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
 			if obj:is_player() then
@@ -545,10 +551,9 @@ minetest.after(0.1, function()
 				--print("[nether] tries to enable a portal")
 				local done = make_portal(pt.under)
 				if done then
-					minetest.chat_send_player(
-						player:get_player_name(),
-						"Warning: If you are in the nether you may not be able to find the way out!"
-					)
+					minetest.chat_send_player(player:get_player_name(),
+						"Warning: If you are in the nether you may not be " ..
+						"able to find the way out!")
 					if not minetest.settings:get_bool("creative_mode") then
 						stack:take_item()
 					end
