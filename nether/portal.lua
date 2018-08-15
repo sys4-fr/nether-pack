@@ -11,35 +11,34 @@ minetest.after(5, function()
 	abm_allowed = true
 end)
 
-table.icontains = table.icontains or function(t, v)
-	for _,i in ipairs(t) do
-		if i == v then
-			return true
-		end
-	end
-	return false
-end
-
+local save_path = minetest.get_worldpath() .. "/nether_players"
 local players_in_nether = {}
 -- only get info from file if nether prisons
 if nether_prisons then
-	local file = io.open(minetest.get_worldpath()..'/nether_players', "r")
-	if file then
-		local contents = file:read('*all')
-		io.close(file)
-		if contents then
-			players_in_nether = string.split(contents, " ")
-		end
+	local file = io.open(save_path, "r")
+	if not file then
+		return
+	end
+	local contents = file:read"*all"
+	io.close(file)
+	if not contents then
+		return
+	end
+	local playernames = string.split(contents, " ")
+	for i = 1,#playernames do
+		players_in_nether[playernames[i]] = true
 	end
 end
 
 local function save_nether_players()
-	local output = ''
-	for _,name in ipairs(players_in_nether) do
-		output = output..name..' '
+	local playernames,n = {},1
+	for name in pairs(players_in_nether) do
+		playernames[n] = name
+		n = n+1
 	end
-	local f = io.open(minetest.get_worldpath()..'/nether_players', "w")
-	f:write(output)
+	local f = io.open(save_path, "w")
+	assert(f, "Could not open nether_players file for writing.")
+	f:write(table.concat(playernames, " "))
 	io.close(f)
 end
 
@@ -100,10 +99,10 @@ end
 -- teleports players to nether or helps it
 local function player_to_nether(player, safe)
 	local pname = player:get_player_name()
-	if table.icontains(players_in_nether, pname) then
+	if players_in_nether[pname] then
 		return
 	end
-	players_in_nether[#players_in_nether+1] = pname
+	players_in_nether[pname] = true
 	save_nether_players()
 	if not safe then
 		minetest.chat_send_player(pname, "For any reason you arrived here. " ..
@@ -118,14 +117,8 @@ end
 
 local function player_from_nether(player)
 	local pname = player:get_player_name()
-	local changes
-	for n,i in ipairs(players_in_nether) do
-		if i == pname then
-			table.remove(players_in_nether, n)
-			changes = true
-		end
-	end
-	if changes then
+	if players_in_nether[pname] then
+		players_in_nether[pname] = nil
 		save_nether_players()
 	end
 	update_background(player)
@@ -133,8 +126,9 @@ end
 
 
 local function player_exists(name)
-	for _,player in pairs(minetest.get_connected_players()) do
-		if player:get_player_name() == name then
+	local players = minetest.get_connected_players()
+	for i = 1,#players do
+		if players[i]:get_player_name() == name then
 			return true
 		end
 	end
@@ -191,7 +185,7 @@ if nether_prisons then
 	-- randomly set player position when he/she dies in nether
 	minetest.register_on_respawnplayer(function(player)
 		local pname = player:get_player_name()
-		if not table.icontains(players_in_nether, pname) then
+		if not players_in_nether[pname] then
 			return
 		end
 		local target = get_player_died_target(player)
@@ -211,7 +205,7 @@ if nether_prisons then
 		for _,player in pairs(minetest.get_connected_players()) do
 			local pname = player:get_player_name()
 			local ppos = player:getpos()
-			if table.icontains(players_in_nether, pname) then
+			if players_in_nether[pname] then
 				if ppos.y > nether.start then
 					player:moveto({x=ppos.x, y=portal_target, z=ppos.z})
 					update_background(player, true)
@@ -248,22 +242,21 @@ if nether_prisons then
 	end)
 else
 	-- test if player is in nether when he/she joins
-	minetest.register_on_joinplayer(function(player)
-		minetest.after(0, function(player)
-			if player:getpos().y < nether.start then
-				if not table.icontains(players_in_nether, pname) then
-					players_in_nether[#players_in_nether+1] = pname
-				end
-				return
-			end
-			for i,name in pairs(players_in_nether) do
-				if name == pname then
-					players_in_nether[i] = nil
-					return
-				end
-			end
-		end, player)
-	end)
+	--~ minetest.register_on_joinplayer(function(player)
+		--~ print(dump(player:get_pos()))
+		--~ minetest.after(0, function(player)
+			--~ local pname = player:get_player_name()
+			--~ if player:getpos().y < nether.start then
+				--~ if not players_in_nether[pname] then
+					--~ players_in_nether[pname] = true
+				--~ end
+				--~ return
+			--~ end
+			--~ if players_in_nether[pname] then
+				--~ players_in_nether[pname] = nil
+			--~ end
+		--~ end, player)
+	--~ end)
 end
 
 -- removes the violet stuff from the obsidian portal
@@ -298,7 +291,7 @@ local particledef = {
 -- teleports player to neter (obsidian portal)
 local function obsi_teleport_player(player, pos, target)
 	local pname = player:get_player_name()
-	if table.icontains(players_in_nether, pname) then
+	if players_in_nether[pname] then
 		return
 	end
 
@@ -313,7 +306,7 @@ local function obsi_teleport_player(player, pos, target)
 		return
 	end
 
-	players_in_nether[#players_in_nether+1] = pname
+	players_in_nether[pname] = true
 	save_nether_players()
 	update_background(player, true)
 
