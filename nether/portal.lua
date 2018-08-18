@@ -200,6 +200,10 @@ if nether_prisons then
 
 	-- override set_pos etc. to disallow player teleportion by e.g. travelnet
 	local function can_teleport(player, pos)
+		if not player:is_player() then
+			-- the same metatable is used for entities
+			return true
+		end
 		local pname = player:get_player_name()
 		local in_nether = players_in_nether[pname] == true
 
