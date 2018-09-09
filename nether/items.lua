@@ -35,9 +35,14 @@ local function add_fence(name)
 end
 --]]
 
+local creative_installed = minetest.global_exists("creative")
+
 local function digging_allowed(player, v)
 	if not player then
 		return false
+	end
+	if creative_installed and creative.is_enabled_for(player:get_player_name()) then
+		return true
 	end
 	local tool = player:get_wielded_item():get_name()
 	tool = minetest.registered_tools[tool] or tool == "" and minetest.registered_items[tool]
