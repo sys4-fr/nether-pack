@@ -18,6 +18,8 @@ local function add_more_nodes(name)
 			nd,
 			data
 		)
+		minetest.register_alias("stairs:stair_"..name, "nether"..":stair_"..name)
+		minetest.register_alias("stairs:slab_"..name, "nether"..":slab_"..name)
 	else
 		stairs.register_stair_and_slab(
 			name, nd,
