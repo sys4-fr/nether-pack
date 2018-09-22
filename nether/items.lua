@@ -11,13 +11,23 @@ local function add_more_nodes(name)
 		name = "nether_"..name
 	end
 	local data = minetest.registered_nodes[nd]
-	stairs.register_stair_and_slab(name, nd,
-		data.groups,
-		data.tiles,
-		data.description.." Stair",
-		data.description.." Slab",
-		data.sounds
-	)
+	if stairsplus then
+		stairsplus:register_all(
+			"nether",
+			name,
+			nd,
+			data
+		)
+	else
+		stairs.register_stair_and_slab(
+			name, nd,
+			data.groups,
+			data.tiles,
+			data.description.." Stair",
+			data.description.." Slab",
+			data.sounds
+		)
+	end
 	if add_fence then
 		add_fence({fence_of = nd})
 	end

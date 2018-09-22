@@ -3,6 +3,7 @@ creative?
 glow
 riesenpilz
 stairs
+moreblocks?
 vector_extras
 fence_registration?
 function_delayer?
